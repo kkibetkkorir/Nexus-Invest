@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nexus Browser | Web3 & Modern Suite</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      background: radial-gradient(circle at 20% 30%, #eef2f7, #e0e6ef);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Main browser window */
+    .browser {
+      width: 1400px;
+      max-width: 96vw;
+      height: 92vh;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(2px);
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* TABS BAR */
+    .tabs-container {
+      background: rgba(248, 250, 252, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding-top: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .tabs-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      padding-bottom: 6px;
+    }
+
+    .tab {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 16px 16px 12px 12px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1e293b;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-bottom: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    .tab.active {
+      background: white;
+      border-color: rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      color: #0f172a;
+    }
+
+    .tab-favicon { width: 18px; height: 18px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+    .tab-title { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+    .tab-close { background: none; border: none; font-size: 18px; cursor: pointer; color: #64748b; width: 22px; height: 22px; border-radius: 40px; }
+    .tab-close:hover { background: rgba(0, 0, 0, 0.1); color: #ef4444; }
+    .new-tab-btn { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.08); border-radius: 30px; width: 32px; height: 32px; cursor: pointer; font-size: 20px; }
+
+    /* NAVIGATION BAR */
+    .nav-bar {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      flex-shrink: 0;
+    }
+    .nav-group { display: flex; gap: 8px; background: rgba(248,250,252,0.7); padding: 4px 8px; border-radius: 40px; }
+    .nav-btn { background: transparent; border: none; width: 36px; height: 36px; border-radius: 40px; font-size: 20px; cursor: pointer; transition: 0.2s; }
+    .nav-btn:hover:not(:disabled) { background: rgba(0,0,0,0.08); }
+    .nav-btn:disabled { opacity: 0.4; }
+    .url-bar-container { flex: 1; }
+    .url-input { width: 100%; padding: 10px 18px; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: 48px; font-size: 14px; outline: none; }
+    .url-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+    .action-icons { display: flex; gap: 6px; }
+    .icon-btn { background: transparent; border: none; width: 38px; height: 38px; border-radius: 40px; font-size: 18px; cursor: pointer; }
+
+    /* FEATURE BUTTONS ROW (new) */
+    .feature-bar {
+      display: flex;
+      gap: 6px;
+      padding: 6px 20px;
+      background: rgba(245, 248, 250, 0.8);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+    .feature-btn {
+      background: transparent;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #334155;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feature-btn:hover { background: rgba(59,130,246,0.1); color: #2563eb; }
+    .feature-btn.active { background: #3b82f6; color: white; }
+
+    /* CONTENT AREA */
+    .content-area {
+      flex: 1;
+      position: relative;
+      background: #fefefe;
+      margin: 4px 8px 8px 8px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+    }
+    .iframe-pane { width: 100%; height: 100%; border: none; background: white; }
+    .feature-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      overflow-y: auto;
+      padding: 28px 32px;
+      z-index: 5;
+      border-radius: 20px;
+    }
+    .hidden-panel { display: none; }
+    .panel-title { font-size: 28px; font-weight: 600; margin-bottom: 24px; background: linear-gradient(135deg, #0f172a, #2d3a5e); background-clip: text; -webkit-background-clip: text; color: transparent; }
+    
+    /* Cards & UI for features */
+    .history-item, .download-item, .extension-card, .wallet-card, .setting-item {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #eef2ff;
+      transition: 0.2s;
+    }
+    .wallet-balance { font-size: 32px; font-weight: 700; color: #0f172a; }
+    .vpn-toggle { background: #3b82f6; color: white; border: none; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-weight: 500; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+    .badge { background: #e2e8f0; padding: 4px 12px; border-radius: 40px; font-size: 12px; }
+    button.primary { background: #3b82f6; border: none; padding: 8px 20px; border-radius: 40px; color: white; cursor: pointer; font-weight: 500; }
+    button.secondary { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 20px; border-radius: 40px; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="browser">
+  <div class="tabs-container">
+    <div class="tabs-row" id="tabsRow"></div>
+    <div style="display: flex; justify-content: flex-end; margin-top: 4px; padding-right: 6px;">
+      <button class="new-tab-btn" id="newTabBtn">+</button>
+    </div>
+  </div>
+  <div class="nav-bar">
+    <div class="nav-group">
+      <button class="nav-btn" id="backBtn">←</button>
+      <button class="nav-btn" id="forwardBtn">→</button>
+      <button class="nav-btn" id="reloadBtn">⟳</button>
+    </div>
+    <div class="url-bar-container"><input type="text" class="url-input" id="urlInput" placeholder="Search or enter address..."></div>
+    <div class="action-icons"><button class="icon-btn" id="homeBtn">🏠</button><button class="icon-btn" id="bookmarkBtn">★</button></div>
+  </div>
+  <!-- Feature quick access bar -->
+  <div class="feature-bar" id="featureBar">
+    <button class="feature-btn" data-panel="downloads">📥 Downloads</button>
+    <button class="feature-btn" data-panel="history">🕘 History</button>
+    <button class="feature-btn" data-panel="settings">⚙️ Settings</button>
+    <button class="feature-btn" data-panel="help">❓ Help</button>
+    <button class="feature-btn" data-panel="extensions">🧩 Extensions</button>
+    <button class="feature-btn" data-panel="marketplace">🛒 Marketplace</button>
+    <button class="feature-btn" data-panel="vpn">🔒 VPN</button>
+    <button class="feature-btn" data-panel="web3">💎 Web3 Wallet</button>
+  </div>
+
+  <div class="content-area" id="contentArea">
+    <iframe id="webFrame" class="iframe-pane" src="about:blank" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"></iframe>
+    
+    <!-- DOWNLOADS PANEL -->
+    <div id="downloadsPanel" class="feature-panel hidden-panel">
+      <div class="panel-title">📥 Downloads</div>
+      <div id="downloadsList">Loading downloads...</div>
+    </div>
+    <!-- HISTORY PANEL -->
+    <div id="historyPanel" class="feature-panel hidden-panel">
+      <div class="panel-title">🕘 Browsing History</div>
+      <div id="historyList"></div>
+      <button id="clearHistoryBtn" class="secondary" style="margin-top: 16px;">Clear All History</button>
+    </div>
+    <!-- SETTINGS PANEL -->
+    <div id="settingsPanel" class="feature-panel hidden-panel">
+      <div class="panel-title">⚙️ Settings</div>
+      <div class="setting-item"><strong>🌙 Dark Mode</strong> <span style="float: right;"><input type="checkbox" id="darkModeToggle"></span><br><small>Coming soon (UI concept)</small></div>
+      <div class="setting-item"><strong>🔍 Default Search Engine</strong><br><select id="searchEngine"><option>Google</option><option>DuckDuckGo</option><option>Bing</option></select></div>
+      <div class="setting-item"><strong>🧹 Clear Browsing Data</strong><br><button id="clearDataBtn" class="secondary">Clear Cache & History</button></div>
+    </div>
+    <!-- HELP PANEL -->
+    <div id="helpPanel" class="feature-panel hidden-panel">
+      <div class="panel-title">❓ Help & Support</div>
+      <div class="history-item">📖 <strong>Getting Started</strong><br>Use tabs, navigate with back/forward, explore Web3 wallet and VPN.</div>
+      <div class="history-item">🔒 <strong>VPN Feature</strong><br>Toggle VPN from the feature bar to enable secure browsing simulation.</div>
+      <div class="history-item">💎 <strong>Web3 Wallet</strong><br>Supports Ethereum, Polygon. View balances and send transactions (demo).</div>
+      <div class="history-item">📧 <strong>Contact</strong><br>support@nexusbrowser.io</div>
+    </div>
+    <!-- EXTENSIONS PANEL -->
+    <div id="extensionsPanel" class="feature-panel hidden-panel">
+      <div class="panel-title">🧩 Installed Extensions</div>
+      <div id="extensionsList"></div>
+    </div>
+    <!-- MARKETPLACE PANEL -->
+    <div id="marketplacePanel" class="feature-panel hidden-panel">
+      <div class="panel-title">🛒 Extension Marketplace</div>
+      <div class="grid-2" id="marketplaceGrid"></div>
+    </div>
+    <!-- VPN PANEL -->
+    <div id="vpnPanel" class="feature-panel hidden-panel">
+      <div class="panel-title">🔒 Nexus VPN (Secure & Fast)</div>
+      <div class="wallet-card" style="text-align: center;"><div id="vpnStatus">⚪ Disconnected</div><button id="vpnToggleBtn" class="vpn-toggle" style="margin-top: 16px;">Connect to VPN</button><p style="margin-top: 20px; font-size: 13px;">🌍 Virtual location: USA, EU, Asia — Encrypted tunnel (simulation)</p></div>
+    </div>
+    <!-- WEB3 WALLET PANEL -->
+    <div id="web3Panel" class="feature-panel hidden-panel">
+      <div class="panel-title">💎 Web3 Crypto Wallet</div>
+      <div class="wallet-card"><div><strong>Network:</strong> <span id="walletNetwork">Ethereum Mainnet</span> <button id="switchNetworkBtn" class="badge" style="margin-left: 8px;">Switch to Polygon</button></div>
+      <div class="wallet-balance" id="walletBalance">0.00 ETH</div>
+      <div><strong>Address:</strong> <span id="walletAddress">0x7E5F...cB2d</span></div>
+      <div style="margin-top: 16px;"><input type="text" id="sendToAddr" placeholder="Recipient address" style="width: 70%; padding: 8px; border-radius: 40px; border:1px solid #ccc;"><input type="text" id="sendAmount" placeholder="Amount" style="width: 20%; padding: 8px; margin-left: 8px; border-radius: 40px;"></div>
+      <button id="sendTxBtn" class="primary" style="margin-top: 12px;">Send Transaction (Demo)</button>
+      <p style="margin-top: 12px; font-size: 12px;">⚡ Web3 simulator — supports ETH & MATIC</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Core Browser State ----------
+  let tabs = [];
+  let activeTabId = null;
+  let tabCounter = 1;
+  let browsingHistory = []; // store {url, title, timestamp}
+  let downloads = []; // demo downloads
+  let installedExtensions = ["AdBlock Plus", "Dark Reader", "Web3 Injector"];
+  let marketplaceExtensions = ["Privacy Badger", "Grammarly", "MetaMask Companion", "Lens Protocol", "IPFS Companion"];
+  let vpnActive = false;
+  let currentWalletNetwork = "ETH";
+  let walletBalanceEth = 2.45;
+  let walletBalanceMatic = 1250;
+  let activePanel = null; // null = iframe mode
+
+  function generateTabId() { return Date.now() + '-' + (Math.random() * 10000 | 0) + '-' + (tabCounter++); }
+  function createDefaultTab() { return { id: generateTabId(), title: "New Tab", url: "about:blank", canGoBack: false, canGoForward: false, historyIndex: 0, historyStack: ["about:blank"], isLoading: false }; }
+
+  function addNewTab() { const newTab = createDefaultTab(); tabs.push(newTab); renderTabsUI(); activateTab(newTab.id); updatePlaceholder(); updateNavControls(); closeAllPanels(); }
+  function removeTab(tabId) { const idx = tabs.findIndex(t => t.id === tabId); if(idx === -1) return; const wasActive = activeTabId === tabId; tabs.splice(idx,1); if(tabs.length===0) { const fresh=createDefaultTab(); tabs.push(fresh); renderTabsUI(); activateTab(fresh.id); } else { renderTabsUI(); if(wasActive) activateTab(tabs[Math.min(idx, tabs.length-1)].id); else if(tabs.some(t=>t.id===activeTabId)) activateTab(activeTabId); else activateTab(tabs[0].id); } updateNavControls(); closeAllPanels(); }
+  function activateTab(tabId) { const tab = tabs.find(t=>t.id===tabId); if(!tab) return; activeTabId=tabId; renderTabsUI(); if(activePanel === null) { document.getElementById('webFrame').style.display = 'block'; const iframe = document.getElementById('webFrame'); if(iframe.src !== tab.url) iframe.src = tab.url; updateUrlInput(tab.url); } updatePlaceholder(); updateNavControls(); }
+  
+  function updateUrlInput(url) { const inp = document.getElementById('urlInput'); inp.value = (url === "about:blank") ? "" : url; }
+  function navigateTo(url, addToHistory=true) { if(activePanel !== null) closeAllPanels(); let tab = tabs.find(t=>t.id===activeTabId); if(!tab) return; if(!url.startsWith('http') && url !== 'about:blank') { if(url.includes('.') && !url.includes(' ')) url='https://'+url; else url='https://www.google.com/search?q='+encodeURIComponent(url); } if(addToHistory){ const newHist = tab.historyStack.slice(0, tab.historyIndex+1); newHist.push(url); tab.historyStack=newHist; tab.historyIndex=newHist.length-1; tab.canGoBack=tab.historyIndex>0; tab.canGoForward=false; } else { if(tab.historyStack.length && tab.historyIndex>=0) tab.historyStack[tab.historyIndex]=url; else {tab.historyStack=[url]; tab.historyIndex=0;} } tab.url=url; let title="Site"; try{title=new URL(url).hostname.replace('www.','');}catch(e){} tab.title=title || "Webpage"; if(url==="about:blank") tab.title="New Tab"; if(activeTabId===tab.id && activePanel===null){ const iframe=document.getElementById('webFrame'); iframe.src=url; updateUrlInput(url); updatePlaceholder(); } renderTabsUI(); updateNavControls(); addToHistoryList(url, title); }
+  function addToHistoryList(url, title){ browsingHistory.unshift({url, title, timestamp: new Date().toLocaleString()}); if(browsingHistory.length>50) browsingHistory.pop(); renderHistoryUI(); }
+  function renderHistoryUI(){ const container=document.getElementById('historyList'); if(!container) return; if(browsingHistory.length===0){ container.innerHTML='<div class="history-item">✨ No browsing history yet.</div>'; return; } container.innerHTML=browsingHistory.map(h=>`<div class="history-item"><strong>${h.title || 'Page'}</strong><br><span style="font-size:12px;color:#475569;">${h.url}</span><div style="font-size:11px;">${h.timestamp}</div><button class="badge history-nav" data-url="${h.url}" style="margin-top:6px;">Visit</button></div>`).join(''); document.querySelectorAll('.history-nav').forEach(btn=>{ btn.addEventListener('click',(e)=>{ const url=btn.getAttribute('data-url'); if(url) navigateTo(url); }); }); }
+  function clearHistory(){ browsingHistory=[]; renderHistoryUI(); }
+  
+  // Downloads simulation
+  function initDownloads(){ downloads=[{name:"nexus_setup.exe", size:"24 MB", date:"Today"},{name:"web3_whitepaper.pdf", size:"1.2 MB", date:"Yesterday"}]; renderDownloadsUI(); }
+  function renderDownloadsUI(){ const cont=document.getElementById('downloadsList'); if(cont) cont.innerHTML=downloads.map(d=>`<div class="download-item">📄 ${d.name} • ${d.size} • ${d.date}<br><button class="badge">Open folder</button></div>`).join('') || '<div>No downloads yet</div>'; }
+  
+  // Extensions UI
+  function renderExtensions(){ const cont=document.getElementById('extensionsList'); if(cont) cont.innerHTML=installedExtensions.map(ext=>`<div class="extension-card">🧩 <strong>${ext}</strong><br><button class="badge remove-ext" data-name="${ext}" style="margin-top:6px;">Remove</button></div>`).join(''); document.querySelectorAll('.remove-ext').forEach(btn=>{ btn.addEventListener('click',(e)=>{ const name=btn.getAttribute('data-name'); installedExtensions=installedExtensions.filter(e=>e!==name); renderExtensions(); }); }); }
+  function renderMarketplace(){ const grid=document.getElementById('marketplaceGrid'); if(grid) grid.innerHTML=marketplaceExtensions.map(ext=>`<div class="extension-card">📦 <strong>${ext}</strong><br><button class="primary install-ext" data-name="${ext}" style="margin-top:6px;">Install</button></div>`).join(''); document.querySelectorAll('.install-ext').forEach(btn=>{ btn.addEventListener('click',(e)=>{ const name=btn.getAttribute('data-name'); if(!installedExtensions.includes(name)){ installedExtensions.push(name); renderExtensions(); alert(`✅ ${name} installed!`); } else alert('Already installed'); }); }); }
+  
+  // VPN logic
+  function updateVPNUI(){ const statusDiv=document.getElementById('vpnStatus'); const btn=document.getElementById('vpnToggleBtn'); if(statusDiv){ statusDiv.innerHTML=vpnActive ? '🟢 VPN Active - Secured' : '⚪ VPN Disconnected'; if(btn) btn.textContent=vpnActive ? 'Disconnect VPN' : 'Connect to VPN'; } }
+  function toggleVPN(){ vpnActive=!vpnActive; updateVPNUI(); alert(vpnActive ? '🔒 VPN: Secure tunnel established (simulated)' : 'VPN disconnected'); }
+  
+  // Web3 Wallet Simulation
+  function updateWalletUI(){ const networkSpan=document.getElementById('walletNetwork'); const balanceSpan=document.getElementById('walletBalance'); const addrSpan=document.getElementById('walletAddress'); if(networkSpan) networkSpan.innerText=currentWalletNetwork==='ETH' ? 'Ethereum Mainnet' : 'Polygon Mainnet'; if(balanceSpan) balanceSpan.innerText=currentWalletNetwork==='ETH' ? `${walletBalanceEth} ETH` : `${walletBalanceMatic} MATIC`; if(addrSpan) addrSpan.innerText='0x7E5F9a...cB2d'; }
+  function switchNetwork(){ currentWalletNetwork=currentWalletNetwork==='ETH' ? 'MATIC' : 'ETH'; updateWalletUI(); alert(`Switched to ${currentWalletNetwork==='ETH' ? 'Ethereum' : 'Polygon'} network`); }
+  function sendTransaction(){ const toAddr=document.getElementById('sendToAddr')?.value; const amount=parseFloat(document.getElementById('sendAmount')?.value); if(!toAddr || !amount || amount<=0){ alert('Enter valid address and amount'); return; } if(currentWalletNetwork==='ETH' && amount>walletBalanceEth){ alert('Insufficient ETH balance'); return; } if(currentWalletNetwork==='MATIC' && amount>walletBalanceMatic){ alert('Insufficient MATIC balance'); return; } if(currentWalletNetwork==='ETH') walletBalanceEth-=amount; else walletBalanceMatic-=amount; updateWalletUI(); alert(`✅ Sent ${amount} ${currentWalletNetwork==='ETH' ? 'ETH' : 'MATIC'} to ${toAddr.slice(0,6)}... (Demo transaction)`); document.getElementById('sendAmount').value=''; document.getElementById('sendToAddr').value=''; }
+  
+  // Panel management
+  function openPanel(panelId){ closeAllPanels(); const panel=document.getElementById(panelId); const iframe=document.getElementById('webFrame'); if(panel){ panel.classList.remove('hidden-panel'); iframe.style.display='none'; activePanel=panelId; } else { iframe.style.display='block'; activePanel=null; updatePlaceholder(); } updateFeatureButtons(panelId); }
+  function closeAllPanels(){ const panels=['downloadsPanel','historyPanel','settingsPanel','helpPanel','extensionsPanel','marketplacePanel','vpnPanel','web3Panel']; panels.forEach(pid=>{ const p=document.getElementById(pid); if(p) p.classList.add('hidden-panel'); }); const iframe=document.getElementById('webFrame'); iframe.style.display='block'; activePanel=null; updateFeatureButtons(null); if(activeTabId){ const tab=tabs.find(t=>t.id===activeTabId); if(tab && tab.url) updatePlaceholder(); } }
+  function updateFeatureButtons(active){ document.querySelectorAll('.feature-btn').forEach(btn=>{ const panelName=btn.getAttribute('data-panel'); if(active && active.includes(panelName)) btn.classList.add('active'); else btn.classList.remove('active'); }); }
+  
+  function updatePlaceholder(){ const tab=tabs.find(t=>t.id===activeTabId); const placeholderDiv=document.getElementById('placeholderPage'); if(!placeholderDiv && !document.querySelector('.placeholder-page')){ const cont=document.getElementById('contentArea'); const newPh=document.createElement('div'); newPh.id='placeholderPage'; newPh.className='placeholder-page'; newPh.innerHTML=`<div style="text-align:center; padding:40px;"><div style="font-size:68px;">🌐✨</div><div style="font-size:28px; font-weight:600;">Nexus Browser</div><div class="speed-dial" id="speedDial"><div class="dial-item" data-url="https://www.google.com">🔍 Google</div><div class="dial-item" data-url="https://github.com">⌨️ GitHub</div><div class="dial-item" data-url="https://www.wikipedia.org">📖 Wiki</div></div></div>`; cont.appendChild(newPh); document.querySelectorAll('.dial-item').forEach(el=>{ el.addEventListener('click',(e)=>{ const url=el.getAttribute('data-url'); if(url) navigateTo(url); }); }); } const ph=document.getElementById('placeholderPage'); if(ph){ if(activePanel===null && tab && (tab.url==='about:blank' || tab.url==='')) ph.style.display='flex'; else ph.style.display='none'; } }
+  
+  function goBack(){ if(activePanel!==null) return; const tab=tabs.find(t=>t.id===activeTabId); if(tab && tab.canGoBack){ tab.historyIndex--; const prev=tab.historyStack[tab.historyIndex]; tab.url=prev; tab.canGoBack=tab.historyIndex>0; tab.canGoForward=true; const iframe=document.getElementById('webFrame'); iframe.src=prev; updateUrlInput(prev); let title="Site"; try{title=new URL(prev).hostname;}catch(e){} tab.title=title; renderTabsUI(); updateNavControls(); updatePlaceholder(); } }
+  function goForward(){ if(activePanel!==null) return; const tab=tabs.find(t=>t.id===activeTabId); if(tab && tab.canGoForward){ tab.historyIndex++; const next=tab.historyStack[tab.historyIndex]; tab.url=next; tab.canGoBack=true; tab.canGoForward=tab.historyIndex<tab.historyStack.length-1; const iframe=document.getElementById('webFrame'); iframe.src=next; updateUrlInput(next); let title="Site"; try{title=new URL(next).hostname;}catch(e){} tab.title=title; renderTabsUI(); updateNavControls(); updatePlaceholder(); } }
+  function reloadCurrent(){ if(activePanel!==null) return; const tab=tabs.find(t=>t.id===activeTabId); if(tab && tab.url!=="about:blank"){ const iframe=document.getElementById('webFrame'); iframe.src=tab.url; } }
+  function goHome(){ navigateTo("https://www.startpage.com"); }
+  function bookmarkCurrent(){ const tab=tabs.find(t=>t.id===activeTabId); if(tab && tab.url!=="about:blank") alert(`⭐ Bookmarked: ${tab.title}\n${tab.url}`); else alert("Navigate to a site first"); }
+  
+  function renderTabsUI(){ const container=document.getElementById('tabsRow'); container.innerHTML=''; tabs.forEach(tab=>{ const div=document.createElement('div'); div.className=`tab ${activeTabId===tab.id?'active':''}`; div.innerHTML=`<span class="tab-favicon">${tab.url!=="about:blank"?'🌐':'✨'}</span><span class="tab-title">${(tab.title.length>18?tab.title.slice(0,16)+'..':tab.title)}</span><button class="tab-close">×</button>`; div.querySelector('.tab-close').addEventListener('click',(e)=>{ e.stopPropagation(); removeTab(tab.id); }); div.addEventListener('click',()=>{ activateTab(tab.id); closeAllPanels(); }); container.appendChild(div); }); }
+  function updateNavControls(){ const tab=tabs.find(t=>t.id===activeTabId); if(tab){ document.getElementById('backBtn').disabled=!tab.canGoBack; document.getElementById('forwardBtn').disabled=!tab.canGoForward; } }
+  
+  function initEventListeners(){ document.getElementById('backBtn').addEventListener('click',goBack); document.getElementById('forwardBtn').addEventListener('click',goForward); document.getElementById('reloadBtn').addEventListener('click',reloadCurrent); document.getElementById('homeBtn').addEventListener('click',goHome); document.getElementById('bookmarkBtn').addEventListener('click',bookmarkCurrent); document.getElementById('newTabBtn').addEventListener('click',addNewTab); document.getElementById('urlInput').addEventListener('keypress',(e)=>{ if(e.key==='Enter'){ const val=document.getElementById('urlInput').value.trim(); if(val) navigateTo(val); } }); document.getElementById('clearHistoryBtn')?.addEventListener('click',clearHistory); document.getElementById('clearDataBtn')?.addEventListener('click',()=>{ clearHistory(); alert('Browsing data cleared (demo)'); }); document.getElementById('vpnToggleBtn')?.addEventListener('click',toggleVPN); document.getElementById('switchNetworkBtn')?.addEventListener('click',switchNetwork); document.getElementById('sendTxBtn')?.addEventListener('click',sendTransaction); document.querySelectorAll('.feature-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ const panel=btn.getAttribute('data-panel'); if(panel==='downloads') openPanel('downloadsPanel'); else if(panel==='history') openPanel('historyPanel'); else if(panel==='settings') openPanel('settingsPanel'); else if(panel==='help') openPanel('helpPanel'); else if(panel==='extensions') openPanel('extensionsPanel'); else if(panel==='marketplace') openPanel('marketplacePanel'); else if(panel==='vpn') openPanel('vpnPanel'); else if(panel==='web3') openPanel('web3Panel'); }); }); document.getElementById('webFrame').addEventListener('load',()=>{ if(activePanel===null){ const iframe=document.getElementById('webFrame'); let finalUrl; try{ finalUrl=iframe.contentWindow.location.href; }catch(e){ finalUrl=null; } if(finalUrl && finalUrl!=='about:blank'){ const tab=tabs.find(t=>t.id===activeTabId); if(tab && tab.url!==finalUrl){ tab.url=finalUrl; let title="Page"; try{title=new URL(finalUrl).hostname;}catch(e){} tab.title=title; if(tab.historyStack[tab.historyIndex]!==finalUrl){ const newHist=tab.historyStack.slice(0,tab.historyIndex+1); newHist.push(finalUrl); tab.historyStack=newHist; tab.historyIndex++; tab.canGoBack=true; tab.canGoForward=false; } renderTabsUI(); updateUrlInput(finalUrl); addToHistoryList(finalUrl,title); } } updatePlaceholder(); } }); }
+  
+  function init(){ const defaultTab=createDefaultTab(); tabs.push(defaultTab); activeTabId=defaultTab.id; browsingHistory.push({url:"https://nexusbrowser.io/welcome", title:"Welcome to Nexus", timestamp:new Date().toLocaleString()}); initDownloads(); renderHistoryUI(); renderExtensions(); renderMarketplace(); updateWalletUI(); updateVPNUI(); renderTabsUI(); updateNavControls(); initEventListeners(); closeAllPanels(); updatePlaceholder(); document.getElementById('webFrame').src='about:blank'; }
+  init();
+</script>
+</body>
+</html>
