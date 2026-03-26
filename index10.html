@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDPR Compliance | Nexus Browser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #0f172a; line-height: 1.6; }
+    .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index: 1000; padding: 16px 32px; }
+    .nav-container { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #667eea, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { text-decoration: none; color: #334155; font-weight: 500; }
+    .btn-primary { background: #3b82f6; color: white; padding: 8px 20px; border-radius: 48px; text-decoration: none; }
+    .legal-container { max-width: 900px; margin: 0 auto; padding: 120px 32px 80px; }
+    h1 { font-size: 48px; font-weight: 800; margin-bottom: 24px; background: linear-gradient(135deg, #0f172a, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    h2 { font-size: 28px; font-weight: 700; margin: 32px 0 16px; }
+    h3 { font-size: 20px; font-weight: 600; margin: 24px 0 12px; }
+    p { margin-bottom: 16px; color: #334155; }
+    ul { margin: 16px 0 16px 32px; }
+    .rights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 24px 0; }
+    .right-card { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #eef2ff; }
+    .right-card h4 { margin-bottom: 8px; color: #3b82f6; }
+    .data-form { background: #f8fafc; padding: 24px; border-radius: 16px; margin: 24px 0; }
+    .data-form input, .data-form textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #e2e8f0; border-radius: 12px; font-family: inherit; }
+    .data-form button { background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 40px; cursor: pointer; margin-top: 12px; }
+    .footer { background: #0f172a; color: white; padding: 48px 32px 24px; margin-top: 48px; }
+    .footer-content { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px; }
+    .footer-section a { display: block; color: #94a3b8; text-decoration: none; margin-bottom: 8px; }
+    .copyright { text-align: center; padding-top: 48px; border-top: 1px solid #334155; color: #94a3b8; }
+    @media (max-width: 768px) { .nav-links { display: none; } h1 { font-size: 32px; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">🌐 Nexus Browser</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#download">Download</a>
+        <a href="blog.html">Blog</a>
+        <a href="help-center.html">Help</a>
+        <a href="index.html#download" class="btn-primary">Get App</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="legal-container">
+    <h1>GDPR Compliance</h1>
+    <div class="last-updated" style="color:#64748b; margin-bottom:32px;">Compliant with EU General Data Protection Regulation (GDPR) 2016/679</div>
+    
+    <p>Nexus Browser is fully committed to protecting your privacy and complying with the GDPR. This page outlines your rights under GDPR and how we ensure compliance.</p>
+    
+    <div class="highlight" style="background:#eef2ff; padding:20px; border-radius:16px; border-left:4px solid #3b82f6; margin:24px 0;">
+      <strong>🇪🇺 GDPR Ready:</strong> We provide transparency, data portability, and full control over your personal information.
+    </div>
+    
+    <h2>Your GDPR Rights</h2>
+    <div class="rights-grid">
+      <div class="right-card"><h4>📋 Right to Access</h4><p>Request a copy of all personal data we hold about you.</p></div>
+      <div class="right-card"><h4>✏️ Right to Rectification</h4><p>Correct inaccurate or incomplete information.</p></div>
+      <div class="right-card"><h4>🗑️ Right to Erasure</h4><p>Request deletion of your data ("right to be forgotten").</p></div>
+      <div class="right-card"><h4>📤 Right to Portability</h4><p>Receive your data in a structured, machine-readable format.</p></div>
+      <div class="right-card"><h4>⛔ Right to Object</h4><p>Object to processing for direct marketing or legitimate interests.</p></div>
+      <div class="right-card"><h4>⚙️ Right to Restrict</h4><p>Limit how we process your data in certain circumstances.</p></div>
+    </div>
+    
+    <h2>Lawful Basis for Processing</h2>
+    <p>Under GDPR, we process personal data based on the following lawful grounds:</p>
+    <ul>
+      <li><strong>Contractual Necessity:</strong> To provide you with Nexus Browser services and features</li>
+      <li><strong>Legal Obligation:</strong> To comply with applicable laws and regulations</li>
+      <li><strong>Legitimate Interests:</strong> To improve our services, prevent fraud, and ensure security</li>
+      <li><strong>Consent:</strong> For optional features like analytics and marketing communications</li>
+    </ul>
+    
+    <h2>Data Protection Officer (DPO)</h2>
+    <p>We have appointed a Data Protection Officer to oversee GDPR compliance:</p>
+    <ul>
+      <li><strong>Name:</strong> Dr. Elena Schmidt</li>
+      <li><strong>Email:</strong> dpo@nexusbrowser.io</li>
+      <li><strong>Address:</strong> Nexus Labs, 123 Blockchain Ave, Suite 400, Wilmington, DE 19801, USA</li>
+    </ul>
+    
+    <h2>Data Processing Agreements (DPA)</h2>
+    <p>For enterprise customers and partners, we sign Data Processing Agreements that meet GDPR Article 28 requirements. <a href="#" style="color:#3b82f6;">Request DPA template →</a></p>
+    
+    <h2>Data Transfers Outside EU</h2>
+    <p>When transferring data outside the European Economic Area (EEA), we ensure adequate safeguards through:</p>
+    <ul>
+      <li>Standard Contractual Clauses (SCCs) adopted by the European Commission</li>
+      <li>Privacy Shield certification (where applicable)</li>
+      <li>Data processing agreements with sub-processors</li>
+    </ul>
+    
+    <h2>Data Retention</h2>
+    <p>We retain personal data only as long as necessary for the purposes outlined in our <a href="privacy.html">Privacy Policy</a>. Retention periods:</p>
+    <ul>
+      <li><strong>Account Data:</strong> Until account deletion or 2 years of inactivity</li>
+      <li><strong>Analytics:</strong> 30 days (anonymized)</li>
+      <li><strong>Support Tickets:</strong> 3 years</li>
+      <li><strong>Transaction Data:</strong> As required for legal compliance (up to 7 years)</li>
+    </ul>
+    
+    <h2>Data Subject Access Request (DSAR)</h2>
+    <p>To exercise your GDPR rights, complete the form below or email <strong>privacy@nexusbrowser.io</strong>. We respond within 30 days.</p>
+    
+    <div class="data-form">
+      <h3 style="margin-bottom:16px;">Submit a Data Request</h3>
+      <input type="text" id="dsarName" placeholder="Full Name" style="margin-bottom:12px;">
+      <input type="email" id="dsarEmail" placeholder="Email Address (used for verification)">
+      <select id="dsarType" style="width:100%; padding:12px; margin:12px 0; border:1px solid #e2e8f0; border-radius:12px;">
+        <option>Right to Access (Request my data)</option>
+        <option>Right to Erasure (Delete my data)</option>
+        <option>Right to Rectification (Correct my data)</option>
+        <option>Right to Portability (Export my data)</option>
+        <option>Other inquiry</option>
+      </select>
+      <textarea id="dsarMessage" rows="3" placeholder="Additional details (optional)"></textarea>
+      <button onclick="submitDSAR()">Submit Request</button>
+      <p style="font-size:13px; margin-top:12px;">We may require identity verification before processing your request.</p>
+    </div>
+    
+    <h2>Supervisory Authority</h2>
+    <p>If you believe your data protection rights have been violated, you have the right to lodge a complaint with your local supervisory authority. For EU residents, this is the Data Protection Commission in your country.</p>
+    
+    <h2>Children's Data</h2>
+    <p>Nexus Browser is not intended for children under 16. We do not knowingly collect data from minors. If we become aware of such data, we will delete it promptly.</p>
+    
+    <h2>Automated Decision-Making</h2>
+    <p>We do not use automated decision-making or profiling that produces legal effects concerning you.</p>
+    
+    <div class="highlight" style="background:#f0fdf4; border-left-color:#10b981;">
+      <strong>✅ GDPR Compliant:</strong> Nexus Browser undergoes regular privacy audits and maintains GDPR compliance documentation.
+    </div>
+  </div>
+  
+  <script>
+    function submitDSAR() {
+      const name = document.getElementById('dsarName').value;
+      const email = document.getElementById('dsarEmail').value;
+      if (!name || !email) {
+        alert("Please provide your name and email for verification.");
+        return;
+      }
+      alert(`✅ Thank you ${name}! Your GDPR request has been submitted. We'll respond within 30 days at ${email}.`);
+      document.getElementById('dsarName').value = '';
+      document.getElementById('dsarEmail').value = '';
+      document.getElementById('dsarMessage').value = '';
+    }
+  </script>
+  
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section"><h4>Nexus Browser</h4><a href="index.html">Home</a><a href="index.html#features">Features</a><a href="index.html#download">Download</a><a href="blog.html">Blog</a></div>
+      <div class="footer-section"><h4>Legal</h4><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="cookie-policy.html">Cookie Policy</a><a href="gdpr.html">GDPR Compliance</a></div>
+      <div class="footer-section"><h4>Support</h4><a href="help-center.html">Help Center</a></div>
+    </div>
+    <div class="copyright">© 2024 Nexus Browser. All rights reserved.</div>
+  </footer>
+</body>
+</html>
