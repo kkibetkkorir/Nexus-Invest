@@ -94,3 +94,33 @@
       <h3 style="margin-bottom:16px;">Cookie Preference Center</h3>
       <button class="pref-btn" onclick="acceptEssential()">Accept Essential Only</button>
       <button class="pref-btn" onclick="acceptAll()">Accept All Cookies</button>
+      <button class="pref-btn" style="background:#64748b;" onclick="rejectAll()">Reject Non-Essential</button>
+      <p style="margin-top:16px; font-size:13px;">Essential cookies are always active. Analytics cookies are optional and collect anonymous data only.</p>
+    </div>
+    
+    <h2>Google Analytics & Privacy</h2>
+    <p>We use Plausible Analytics, a privacy-first alternative to Google Analytics. Plausible does not use cookies and does not collect personal data. All data is aggregated and anonymized. No IP addresses are stored.</p>
+    
+    <h2>Updates to This Policy</h2>
+    <p>We may update this Cookie Policy periodically. Changes will be posted here with an updated effective date. Significant changes will be notified via our website or email.</p>
+    
+    <h2>Contact Us</h2>
+    <p>If you have questions about our cookie practices, contact us at <strong>privacy@nexusbrowser.io</strong></p>
+  </div>
+  
+  <script>
+    function acceptEssential() { alert("✅ Essential cookies only. Analytics disabled. Preference saved."); localStorage.setItem('cookieConsent', 'essential'); }
+    function acceptAll() { alert("✅ All cookies accepted. Thank you for supporting Nexus Browser analytics (anonymous only)."); localStorage.setItem('cookieConsent', 'all'); }
+    function rejectAll() { alert("⚠️ Non-essential cookies rejected. Only essential cookies remain."); localStorage.setItem('cookieConsent', 'essential'); }
+  </script>
+  
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section"><h4>Nexus Browser</h4><a href="index.html">Home</a><a href="index.html#features">Features</a><a href="index.html#download">Download</a><a href="blog.html">Blog</a></div>
+      <div class="footer-section"><h4>Legal</h4><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="cookie-policy.html">Cookie Policy</a><a href="gdpr.html">GDPR Compliance</a></div>
+      <div class="footer-section"><h4>Support</h4><a href="help-center.html">Help Center</a></div>
+    </div>
+    <div class="copyright">© 2024 Nexus Browser. All rights reserved.</div>
+  </footer>
+</body>
+</html>
