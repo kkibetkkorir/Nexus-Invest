@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center | Nexus Browser Support</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #0f172a; }
+    .navbar { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index: 1000; padding: 16px 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .nav-container { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #667eea, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { text-decoration: none; color: #334155; font-weight: 500; }
+    .nav-links a:hover, .nav-links a.active { color: #3b82f6; }
+    .btn-primary { background: #3b82f6; color: white; padding: 8px 20px; border-radius: 48px; text-decoration: none; }
+    .help-header { padding: 120px 32px 60px; background: linear-gradient(135deg, #f8fafc, #eef2ff); text-align: center; }
+    .help-header h1 { font-size: 48px; font-weight: 800; margin-bottom: 16px; }
+    .search-box { max-width: 600px; margin: 32px auto 0; position: relative; }
+    .search-box input { width: 100%; padding: 16px 24px; border: 1px solid #e2e8f0; border-radius: 60px; font-size: 16px; padding-right: 60px; }
+    .search-box button { position: absolute; right: 8px; top: 8px; background: #3b82f6; border: none; color: white; padding: 8px 20px; border-radius: 40px; cursor: pointer; }
+    .help-container { max-width: 1280px; margin: 0 auto; padding: 48px 32px; }
+    .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 48px; }
+    .category-card { background: white; border: 1px solid #eef2ff; border-radius: 24px; padding: 24px; transition: 0.2s; cursor: pointer; }
+    .category-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -12px rgba(0,0,0,0.1); border-color: #3b82f6; }
+    .category-icon { font-size: 32px; margin-bottom: 16px; }
+    .category-card h3 { margin-bottom: 8px; }
+    .faq-section { margin-top: 48px; }
+    .faq-item { border-bottom: 1px solid #eef2ff; padding: 20px 0; }
+    .faq-question { font-weight: 600; font-size: 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-answer { display: none; padding-top: 12px; color: #475569; line-height: 1.6; }
+    .faq-answer.show { display: block; }
+    .contact-card { background: linear-gradient(135deg, #667eea, #3b82f6); border-radius: 24px; padding: 32px; text-align: center; color: white; margin-top: 48px; }
+    .contact-card h3 { margin-bottom: 16px; }
+    .contact-buttons { display: flex; gap: 16px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+    .contact-btn { background: white; color: #3b82f6; padding: 12px 24px; border-radius: 40px; text-decoration: none; font-weight: 600; }
+    .footer { background: #0f172a; color: white; padding: 48px 32px 24px; margin-top: 48px; }
+    .footer-content { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px; }
+    .footer-section a { display: block; color: #94a3b8; text-decoration: none; margin-bottom: 8px; }
+    .copyright { text-align: center; padding-top: 48px; border-top: 1px solid #334155; color: #94a3b8; }
+    @media (max-width: 768px) { .nav-links { display: none; } .help-header h1 { font-size: 32px; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">🌐 Nexus Browser</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#download">Download</a>
+        <a href="blog.html">Blog</a>
+        <a href="help-center.html" class="active">Help</a>
+        <a href="index.html#download" class="btn-primary">Get App</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="help-header">
+    <h1>How can we help you?</h1>
+    <p>Find answers, tutorials, and support for Nexus Browser</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search for help articles...">
+      <button onclick="searchHelp()">Search</button>
+    </div>
+  </div>
+
+  <div class="help-container">
+    <div class="categories-grid" id="categoriesGrid">
+      <div class="category-card" onclick="filterCategory('getting-started')"><div class="category-icon">🚀</div><h3>Getting Started</h3><p>Installation, setup, and first steps</p></div>
+      <div class="category-card" onclick="filterCategory('wallet')"><div class="category-icon">💎</div><h3>Crypto Wallet</h3><p>Managing assets, sending, receiving</p></div>
+      <div class="category-card" onclick="filterCategory('vpn')"><div class="category-icon">🔒</div><h3>VPN & Privacy</h3><p>Secure browsing, no-logs policy</p></div>
+      <div class="category-card" onclick="filterCategory('extensions')"><div class="category-icon">🧩</div><h3>Extensions</h3><p>Install and manage extensions</p></div>
+      <div class="category-card" onclick="filterCategory('troubleshooting')"><div class="category-icon">🛠️</div><h3>Troubleshooting</h3><p>Fix common issues and errors</p></div>
+      <div class="category-card" onclick="filterCategory('account')"><div class="category-icon">👤</div><h3>Account & Security</h3><p>Manage account, 2FA, recovery</p></div>
+    </div>
+
+    <div class="faq-section" id="faqSection">
+      <h2 style="margin-bottom: 24px;">Frequently Asked Questions</h2>
+      <div id="faqList"></div>
+    </div>
+
+    <div class="contact-card">
+      <h3>Still need help?</h3>
+      <p>Our support team is available 24/7 to assist you</p>
+      <div class="contact-buttons">
+        <a href="#" class="contact-btn">📧 Email Support</a>
+        <a href="#" class="contact-btn">💬 Live Chat</a>
+        <a href="#" class="contact-btn">📱 Discord Community</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section"><h4>Nexus Browser</h4><a href="index.html">Home</a><a href="index.html#features">Features</a><a href="index.html#download">Download</a><a href="blog.html">Blog</a></div>
+      <div class="footer-section"><h4>Legal</h4><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="cookie-policy.html">Cookie Policy</a><a href="gdpr.html">GDPR Compliance</a></div>
+      <div class="footer-section"><h4>Support</h4><a href="help-center.html">Help Center</a></div>
+    </div>
+    <div class="copyright">© 2024 Nexus Browser. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const faqs = {
+      all: [
+        { q: "How do I install Nexus Browser?", a: "Download from our website, Google Play Store, or Apple App Store. Follow the installation wizard for your platform." },
+        { q: "Is Nexus Browser free?", a: "Yes, Nexus Browser is free to download and use. Premium VPN features are available via subscription." },
+        { q: "How do I create a crypto wallet?", a: "Open the wallet panel and click 'Create New Wallet'. Securely save your seed phrase offline." },
+        { q: "Does Nexus Browser sell my data?", a: "Never. We do not sell user data. Read our Privacy Policy for full transparency." }
+      ],
+      'getting-started': [
+        { q: "How do I install Nexus Browser?", a: "Download from our website, Google Play Store, or Apple App Store. Follow the installation wizard for your platform." },
+        { q: "How do I set up my profile?", a: "Go to Settings > Profile. You can add your name, email, and customize preferences." }
+      ],
+      wallet: [
+        { q: "How do I create a crypto wallet?", a: "Open the wallet panel and click 'Create New Wallet'. Securely save your seed phrase offline." },
+        { q: "How do I receive crypto?", a: "Click 'Receive' in wallet to copy your address or share QR code." }
+      ],
+      vpn: [
+        { q: "How do I enable VPN?", a: "Click the VPN icon in the toolbar or go to Settings > VPN and toggle on." },
+        { q: "Does Nexus VPN keep logs?", a: "No. We operate a strict no-logs policy. Your activity is never recorded." }
+      ],
+      extensions: [
+        { q: "How do I install extensions?", a: "Visit the Extension Marketplace from the sidebar, browse, and click 'Install'." },
+        { q: "Are extensions safe?", a: "All extensions are reviewed. Always review permissions before installing." }
+      ],
+      troubleshooting: [
+        { q: "Browser is slow. What should I do?", a: "Clear cache, close unused tabs, or restart the app. Check your internet connection." },
+        { q: "Wallet not loading?", a: "Ensure you're connected to the internet. Try refreshing or restarting Nexus." }
+      ],
+      account: [
+        { q: "How do I reset my password?", a: "Click 'Forgot Password' on login screen. You'll receive a reset link via email." },
+        { q: "How do I enable 2FA?", a: "Go to Settings > Security > Two-Factor Authentication and follow setup instructions." }
+      ]
+    };
+
+    function renderFAQs(category = 'all') {
+      const faqList = document.getElementById('faqList');
+      const items = faqs[category] || faqs.all;
+      faqList.innerHTML = items.map((faq, idx) => `
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleAnswer(${idx})">
+            ${faq.q}
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer" id="answer-${idx}">${faq.a}</div>
+        </div>
+      `).join('');
+    }
+
+    function toggleAnswer(idx) {
+      const answer = document.getElementById(`answer-${idx}`);
+      answer.classList.toggle('show');
+    }
+
+    function filterCategory(category) {
+      renderFAQs(category);
+      document.querySelectorAll('.category-card').forEach(card => card.style.borderColor = '#eef2ff');
+      event.currentTarget.style.borderColor = '#3b82f6';
+    }
+
+    function searchHelp() {
+      const term = document.getElementById('searchInput').value.toLowerCase();
+      if (!term) return;
+      const allFaqs = [...faqs.all, ...faqs['getting-started'], ...faqs.wallet, ...faqs.vpn, ...faqs.extensions, ...faqs.troubleshooting, ...faqs.account];
+      const results = allFaqs.filter(f => f.q.toLowerCase().includes(term) || f.a.toLowerCase().includes(term));
+      const faqList = document.getElementById('faqList');
+      if (results.length) {
+        faqList.innerHTML = results.map((faq, idx) => `
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleAnswerSearch(${idx})">${faq.q}<i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer" id="search-answer-${idx}">${faq.a}</div>
+          </div>
+        `).join('');
+        window.searchAnswers = results;
+      } else {
+        faqList.innerHTML = '<p>No results found. Try a different search term or contact support.</p>';
+      }
+    }
+
+    function toggleAnswerSearch(idx) {
+      const answer = document.getElementById(`search-answer-${idx}`);
+      if (answer) answer.classList.toggle('show');
+    }
+
+    renderFAQs('all');
+  </script>
+</body>
+</html>
