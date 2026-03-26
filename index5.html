@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- SEO & Meta -->
+  <title>Nexus Browser | Web3 Crypto Browser - Download Now</title>
+  <meta name="description" content="Download Nexus Browser - The ultimate Web3 browser with built-in crypto wallet, VPN, extension marketplace, and DeFi tools. Available for iOS, Android, Windows, Mac, and as a PWA.">
+  <meta name="keywords" content="web3 browser, crypto browser, blockchain browser, crypto wallet, vpn browser, download browser">
+  <meta name="author" content="Nexus Labs">
+  <meta property="og:title" content="Nexus Browser - Web3 Crypto Browser">
+  <meta property="og:description" content="Experience the future of browsing with built-in crypto wallet, VPN, and Web3 features.">
+  <meta property="og:image" content="https://nexusbrowser.io/og-image.jpg">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    /* Gradient Backgrounds */
+    .gradient-bg {
+      background: radial-gradient(circle at 20% 30%, #f8fafc, #ffffff);
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #3b82f6 100%);
+    }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      padding: 16px 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #334155;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #3b82f6;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 32px 80px;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+    }
+
+    .hero-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content h1 {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #0f172a, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-content p {
+      font-size: 18px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 48px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(59,130,246,0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #3b82f6;
+      padding: 14px 32px;
+      border-radius: 48px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #cbd5e1;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 80px 32px;
+      background: white;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 48px;
+      font-size: 18px;
+    }
+
+    .features-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+
+    .feature-card {
+      background: #f8fafc;
+      padding: 32px;
+      border-radius: 24px;
+      transition: all 0.3s;
+      border: 1px solid #eef2ff;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.15);
+      border-color: #3b82f6;
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea, #3b82f6);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* Download Page */
+    .download-page {
+      padding: 120px 32px 80px;
+      background: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .download-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .download-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .device-badge {
+      display: inline-block;
+      background: #eef2ff;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #3b82f6;
+      margin-bottom: 20px;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .download-card {
+      background: white;
+      border-radius: 32px;
+      padding: 32px;
+      text-align: center;
+      transition: all 0.3s;
+      border: 2px solid #eef2ff;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .download-card.recommended {
+      border: 2px solid #3b82f6;
+      background: linear-gradient(135deg, #ffffff, #eff6ff);
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px -12px rgba(59,130,246,0.3);
+    }
+
+    .recommended-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: #3b82f6;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .download-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .download-card h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .download-card p {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .download-btn {
+      background: #f1f5f9;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 16px;
+    }
+
+    .download-card.recommended .download-btn {
+      background: #3b82f6;
+      color: white;
+    }
+
+    /* Mobile Install Banner */
+    .install-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: #1e293b;
+      color: white;
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2000;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .banner-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .banner-icon {
+      font-size: 32px;
+    }
+
+    .banner-text h4 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .banner-text p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .banner-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .banner-download {
+      background: #3b82f6;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0f172a;
+      color: white;
+      padding: 48px 32px 24px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 48px;
+    }
+
+    .footer-section h4 {
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .footer-section a {
+      display: block;
+      color: #94a3b8;
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .footer-section a:hover {
+      color: white;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 48px;
+      margin-top: 48px;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-content h1 {
+        font-size: 40px;
+      }
+      .cta-group {
+        justify-content: center;
+      }
+      .hero-stats {
+        justify-content: center;
+      }
+      .nav-links {
+        display: none;
+      }
+      .install-banner {
+        left: 16px;
+        right: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">🌐 Nexus Browser</div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+        <a href="#about">About</a>
+        <a href="#download" class="btn-primary" style="padding: 8px 20px;">Get App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1>The Web3 Browser<br>Built for the Future</h1>
+        <p>Experience seamless browsing with built-in crypto wallet, VPN, extension marketplace, and DeFi tools. All in one secure, private browser.</p>
+        <div class="cta-group">
+          <a href="#download" class="btn-primary" id="heroDownloadBtn">
+            <i class="fas fa-download"></i> Download Now
+          </a>
+          <a href="#features" class="btn-secondary">
+            <i class="fas fa-play"></i> Watch Demo
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-number">500K+</div>
+            <div class="stat-label">Downloads</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">4.8</div>
+            <div class="stat-label">Rating</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Countries</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://placehold.co/500x500/667eea/white?text=Nexus+Browser" alt="Nexus Browser Preview" style="width: 100%; border-radius: 48px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);">
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <h2 class="section-title">Powerful Features</h2>
+    <p class="section-subtitle">Everything you need for the modern web</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+        <h3>Built-in Crypto Wallet</h3>
+        <p>Secure multi-chain wallet supporting BTC, ETH, SOL, and 1000+ tokens. Send, receive, and swap directly in browser.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Built-in VPN</h3>
+        <p>One-click VPN with 50+ global servers. Encrypt your traffic and browse anonymously with no logs policy.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-puzzle-piece"></i></div>
+        <h3>Extension Marketplace</h3>
+        <p>Install custom extensions, ad-blockers, and Web3 tools from our curated marketplace.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>DeFi Dashboard</h3>
+        <p>Track portfolio, stake tokens, and interact with dApps directly from your browser.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+        <h3>Cross-Platform Sync</h3>
+        <p>Sync bookmarks, history, and wallet across all your devices with end-to-end encryption.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+        <h3>Privacy First</h3>
+        <p>Built-in tracker blocking, fingerprint protection, and private mode for secure browsing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Page Section -->
+  <section id="download" class="download-page">
+    <div class="download-container">
+      <div class="download-header">
+        <div class="device-badge" id="deviceBadge">📱 Detecting your device...</div>
+        <h2 class="section-title">Download Nexus Browser</h2>
+        <p class="section-subtitle">Choose your platform and start browsing the decentralized web</p>
+      </div>
+      <div class="download-grid" id="downloadGrid">
+        <!-- Dynamic download cards will be populated here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="about" class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Nexus Browser</h4>
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+        <a href="#">Security</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Developer Docs</a>
+        <a href="#">GitHub</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="footer-section">
+        <h4>Community</h4>
+        <a href="#">Discord</a>
+        <a href="#">Twitter</a>
+        <a href="#">Telegram</a>
+        <a href="#">Reddit</a>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">GDPR</a>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2024 Nexus Browser. All rights reserved. Built for Web3.
+    </div>
+  </footer>
+
+  <!-- Mobile Install Banner -->
+  <div id="installBanner" class="install-banner">
+    <div class="banner-content">
+      <div class="banner-icon"><i class="fas fa-mobile-alt"></i></div>
+      <div class="banner-text">
+        <h4>Get Nexus Browser on your device</h4>
+        <p>Fast, secure, Web3-ready browser</p>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <a href="#" id="bannerDownloadLink" class="banner-download">Download</a>
+      <button class="banner-close" id="closeBannerBtn">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    // Device Detection
+    function detectDevice() {
+      const ua = navigator.userAgent;
+      const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+      const isAndroid = /Android/.test(ua);
+      const isWindows = /Windows/.test(ua);
+      const isMac = /Macintosh/.test(ua);
+      const isLinux = /Linux/.test(ua);
+      
+      return { isIOS, isAndroid, isWindows, isMac, isLinux, isMobile: isIOS || isAndroid };
+    }
+    
+    // Download options with store links
+    const downloadOptions = [
+      {
+        id: 'ios',
+        name: 'iOS App',
+        icon: '<i class="fab fa-apple"></i>',
+        description: 'For iPhone & iPad',
+        store: 'Apple App Store',
+        link: 'https://apps.apple.com/app/nexus-browser',
+        badge: 'https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg'
+      },
+      {
+        id: 'android',
+        name: 'Android App',
+        icon: '<i class="fab fa-android"></i>',
+        description: 'For Android phones & tablets',
+        store: 'Google Play Store',
+        link: 'https://play.google.com/store/apps/details?id=io.nexus.browser',
+        badge: 'https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'
+      },
+      {
+        id: 'windows',
+        name: 'Windows Desktop',
+        icon: '<i class="fab fa-windows"></i>',
+        description: 'Windows 10/11',
+        store: 'Microsoft Store',
+        link: 'https://www.microsoft.com/store/apps/nexus-browser',
+        directLink: '#'
+      },
+      {
+        id: 'mac',
+        name: 'macOS',
+        icon: '<i class="fab fa-apple"></i>',
+        description: 'For Mac computers',
+        store: 'Mac App Store',
+        link: 'https://apps.apple.com/app/nexus-browser-mac',
+        directLink: '#'
+      },
+      {
+        id: 'linux',
+        name: 'Linux',
+        icon: '<i class="fab fa-linux"></i>',
+        description: 'Debian, Ubuntu, Fedora',
+        store: 'Snap Store / Flatpak',
+        link: '#',
+        directLink: '#'
+      },
+      {
+        id: 'pwa',
+        name: 'PWA / Web App',
+        icon: '<i class="fas fa-globe"></i>',
+        description: 'Install as Progressive Web App',
+        store: 'Install from Browser',
+        link: '#',
+        directLink: '#',
+        isPWA: true
+      }
+    ];
+    
+    // Get recommended platform based on device
+    function getRecommendedPlatform(device) {
+      if (device.isIOS) return 'ios';
+      if (device.isAndroid) return 'android';
+      if (device.isWindows) return 'windows';
+      if (device.isMac) return 'mac';
+      return 'pwa';
+    }
+    
+    // Render download cards
+    function renderDownloadCards() {
+      const device = detectDevice();
+      const recommended = getRecommendedPlatform(device);
+      const grid = document.getElementById('downloadGrid');
+      
+      // Update device badge
+      const badge = document.getElementById('deviceBadge');
+      let deviceName = '';
+      if (device.isIOS) deviceName = '🍎 iOS Device Detected';
+      else if (device.isAndroid) deviceName = '🤖 Android Device Detected';
+      else if (device.isWindows) deviceName = '🪟 Windows PC Detected';
+      else if (device.isMac) deviceName = '🍎 Mac Detected';
+      else deviceName = '💻 Desktop Detected';
+      badge.innerHTML = deviceName + ' ✓ Recommended version highlighted';
+      
+      grid.innerHTML = downloadOptions.map(opt => `
+        <a href="${opt.link}" class="download-card ${recommended === opt.id ? 'recommended' : ''}" data-platform="${opt.id}">
+          ${recommended === opt.id ? '<div class="recommended-badge"><i class="fas fa-star"></i> Recommended</div>' : ''}
+          <div class="download-icon">${opt.icon}</div>
+          <h3>${opt.name}</h3>
+          <p>${opt.description}</p>
+          <div class="download-btn">
+            <i class="fas fa-download"></i> ${opt.store}
+          </div>
+        </a>
+      `).join('');
+    }
+    
+    // Mobile Install Banner Logic
+    function initMobileBanner() {
+      const device = detectDevice();
+      const banner = document.getElementById('installBanner');
+      const closeBtn = document.getElementById('closeBannerBtn');
+      const downloadLink = document.getElementById('bannerDownloadLink');
+      
+      // Check if banner was dismissed before
+      const bannerDismissed = localStorage.getItem('nexus_banner_dismissed');
+      
+      // Show banner only on mobile devices and if not dismissed
+      if (device.isMobile && !bannerDismissed) {
+        setTimeout(() => {
+          banner.style.display = 'flex';
+        }, 1500);
+        
+        // Set correct download link based on device
+        if (device.isIOS) {
+          downloadLink.href = 'https://apps.apple.com/app/nexus-browser';
+          document.querySelector('.banner-icon').innerHTML = '<i class="fab fa-apple"></i>';
+        } else if (device.isAndroid) {
+          downloadLink.href = 'https://play.google.com/store/apps/details?id=io.nexus.browser';
+          document.querySelector('.banner-icon').innerHTML = '<i class="fab fa-android"></i>';
+        }
+      }
+      
+      // Close banner handler
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          banner.style.display = 'none';
+          localStorage.setItem('nexus_banner_dismissed', 'true');
+        });
+      }
+    }
+    
+    // PWA Install Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Optional: Show custom install button for PWA
+      const pwaCard = document.querySelector('.download-card[data-platform="pwa"]');
+      if (pwaCard) {
+        pwaCard.addEventListener('click', (e) => {
+          if (deferredPrompt) {
+            e.preventDefault();
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted PWA install');
+              }
+              deferredPrompt = null;
+            });
+          }
+        });
+      }
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+    
+    // Hero button scroll to download
+    document.getElementById('heroDownloadBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('download').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    
+    // Initialize
+    renderDownloadCards();
+    initMobileBanner();
+    
+    // Add animation on scroll
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.feature-card, .download-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'all 0.5s ease';
+      observer.observe(el);
+    });
+    
+    // Force reflow to trigger animations
+    setTimeout(() => {
+      document.querySelectorAll('.feature-card, .download-card').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight) {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }
+      });
+    }, 100);
+  </script>
+</body>
+</html>
