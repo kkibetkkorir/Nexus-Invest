@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Nexus Auth | Secure Login & Register</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 30%, #0f172a, #020617);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Glassmorphic Auth Container */
+    .auth-container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-radius: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    /* Tabs */
+    .auth-tabs {
+      display: flex;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #64748b;
+    }
+
+    .tab-btn.active {
+      color: #3b82f6;
+      background: white;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    /* Form Panels */
+    .auth-panel {
+      padding: 32px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .auth-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 28px;
+      font-size: 15px;
+      transition: all 0.2s;
+      outline: none;
+      background: white;
+    }
+
+    .input-group input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .phone-input-wrapper {
+      display: flex;
+      gap: 12px;
+    }
+
+    .country-code {
+      width: 100px;
+      flex-shrink: 0;
+    }
+
+    .phone-number {
+      flex: 1;
+    }
+
+    .otp-section {
+      display: none;
+      margin-top: 16px;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .otp-section.show {
+      display: block;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: #3b82f6;
+      font-size: 13px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .divider span {
+      padding: 0 16px;
+    }
+
+    /* Social Login Buttons */
+    .social-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 48px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .social-btn:hover {
+      background: #f8fafc;
+      transform: scale(0.98);
+      border-color: #3b82f6;
+    }
+
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    /* Web3Auth Button */
+    .web3auth-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+    }
+
+    .web3auth-btn:hover {
+      background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    }
+
+    /* Message Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 48px;
+      font-size: 14px;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .ios-badge {
+      background: #000;
+      color: white;
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block;
+    }
+
+    .success-msg {
+      color: #10b981;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="auth-container">
+  <div class="auth-tabs">
+    <button class="tab-btn active" data-tab="login">Login</button>
+    <button class="tab-btn" data-tab="register">Register</button>
+  </div>
+
+  <!-- LOGIN PANEL -->
+  <div id="loginPanel" class="auth-panel active">
+    <h2 style="margin-bottom: 24px; font-size: 28px; font-weight: 700;">Welcome Back</h2>
+    
+    <div class="input-group">
+      <label>Phone Number</label>
+      <div class="phone-input-wrapper">
+        <select id="loginCountryCode" class="country-code" style="padding: 14px; border-radius: 28px; border: 2px solid #e2e8f0;">
+          <option value="+1">🇺🇸 +1 (US)</option>
+          <option value="+44">🇬🇧 +44 (UK)</option>
+          <option value="+254">🇰🇪 +254 (Kenya)</option>
+          <option value="+234">🇳🇬 +234 (Nigeria)</option>
+          <option value="+91">🇮🇳 +91 (India)</option>
+          <option value="+86">🇨🇳 +86 (China)</option>
+          <option value="+81">🇯🇵 +81 (Japan)</option>
+          <option value="+61">🇦🇺 +61 (Australia)</option>
+          <option value="+33">🇫🇷 +33 (France)</option>
+          <option value="+49">🇩🇪 +49 (Germany)</option>
+        </select>
+        <input type="tel" id="loginPhone" class="phone-number" placeholder="Phone number" autocomplete="off">
+      </div>
+    </div>
+
+    <button id="loginSendOtpBtn" class="btn btn-primary">Send OTP</button>
+
+    <div id="loginOtpSection" class="otp-section">
+      <div class="input-group" style="margin-top: 16px;">
+        <label>Enter OTP Code</label>
+        <input type="text" id="loginOtp" placeholder="6-digit code" maxlength="6">
+      </div>
+      <button id="loginVerifyBtn" class="btn btn-primary">Verify & Login</button>
+      <button id="loginResendOtp" class="resend-btn">Resend OTP</button>
+    </div>
+
+    <div class="divider"><span>Or continue with</span></div>
+
+    <div class="social-grid">
+      <button class="social-btn" id="googleLoginBtn">
+        <span class="social-icon">G</span> Continue with Google
+      </button>
+      <button class="social-btn" id="facebookLoginBtn">
+        <span class="social-icon">f</span> Continue with Facebook
+      </button>
+      <button class="social-btn web3auth-btn" id="web3AuthLoginBtn">
+        <span class="social-icon">⛓️</span> Continue with Web3Auth
+      </button>
+      <button class="social-btn" id="appleLoginBtn" style="display: none;">
+        <span class="social-icon">🍎</span> Continue with Apple
+      </button>
+    </div>
+  </div>
+
+  <!-- REGISTER PANEL -->
+  <div id="registerPanel" class="auth-panel">
+    <h2 style="margin-bottom: 24px; font-size: 28px; font-weight: 700;">Create Account</h2>
+    
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" id="regName" placeholder="John Doe">
+    </div>
+    
+    <div class="input-group">
+      <label>Phone Number</label>
+      <div class="phone-input-wrapper">
+        <select id="regCountryCode" class="country-code" style="padding: 14px; border-radius: 28px; border: 2px solid #e2e8f0;">
+          <option value="+1">🇺🇸 +1 (US)</option>
+          <option value="+44">🇬🇧 +44 (UK)</option>
+          <option value="+254">🇰🇪 +254 (Kenya)</option>
+          <option value="+234">🇳🇬 +234 (Nigeria)</option>
+          <option value="+91">🇮🇳 +91 (India)</option>
+        </select>
+        <input type="tel" id="regPhone" class="phone-number" placeholder="Phone number">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Email (Optional)</label>
+      <input type="email" id="regEmail" placeholder="you@example.com">
+    </div>
+
+    <button id="registerSendOtpBtn" class="btn btn-primary">Send OTP</button>
+
+    <div id="registerOtpSection" class="otp-section">
+      <div class="input-group" style="margin-top: 16px;">
+        <label>Enter OTP Code</label>
+        <input type="text" id="registerOtp" placeholder="6-digit code" maxlength="6">
+      </div>
+      <button id="registerVerifyBtn" class="btn btn-primary">Verify & Register</button>
+      <button id="registerResendOtp" class="resend-btn">Resend OTP</button>
+    </div>
+
+    <div class="divider"><span>Or register with</span></div>
+
+    <div class="social-grid">
+      <button class="social-btn" id="googleRegBtn">
+        <span class="social-icon">G</span> Sign up with Google
+      </button>
+      <button class="social-btn" id="facebookRegBtn">
+        <span class="social-icon">f</span> Sign up with Facebook
+      </button>
+      <button class="social-btn web3auth-btn" id="web3AuthRegBtn">
+        <span class="social-icon">⛓️</span> Sign up with Web3Auth
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ========== AUTH STATE & SIMULATED OTP ==========
+  // In production, these would call actual backend APIs
+  let pendingLoginPhone = null;
+  let pendingRegisterPhone = null;
+  let generatedOtp = null;
+  let otpExpiry = null;
+
+  // Simulate sending OTP (in real app, this would call SMS API)
+  function sendOtp(phoneNumber, type) {
+    // Generate random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    generatedOtp = otp;
+    otpExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes expiry
+    
+    console.log(`[DEMO] OTP for ${phoneNumber}: ${otp}`); // For testing
+    
+    if (type === 'login') {
+      pendingLoginPhone = phoneNumber;
+      document.getElementById('loginOtpSection').classList.add('show');
+      showToast(`OTP sent to ${phoneNumber}. Demo OTP: ${otp}`, 5000);
+    } else {
+      pendingRegisterPhone = phoneNumber;
+      document.getElementById('registerOtpSection').classList.add('show');
+      showToast(`OTP sent to ${phoneNumber}. Demo OTP: ${otp}`, 5000);
+    }
+  }
+
+  function verifyOtp(enteredOtp, type) {
+    if (!generatedOtp) {
+      showToast('No OTP request found. Please request a new code.', 'error');
+      return false;
+    }
+    
+    if (Date.now() > otpExpiry) {
+      showToast('OTP has expired. Please request a new code.', 'error');
+      return false;
+    }
+    
+    if (enteredOtp !== generatedOtp) {
+      showToast('Invalid OTP. Please try again.', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+
+  // Simulate social/auth provider login
+  function socialLogin(provider, isRegister = false) {
+    showToast(`🔐 ${provider} ${isRegister ? 'registration' : 'login'} initiated (Demo)`, 3000);
+    // In production, redirect to OAuth providers or Web3Auth SDK
+    setTimeout(() => {
+      const userData = {
+        name: `User_${provider}`,
+        email: `user@${provider.toLowerCase()}.com`,
+        provider: provider,
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('nexus_auth_user', JSON.stringify(userData));
+      showToast(`✅ Successfully ${isRegister ? 'registered' : 'logged in'} with ${provider}! Redirecting...`, 2000);
+      setTimeout(() => {
+        window.location.href = 'index.html'; // Redirect to main browser
+      }, 1500);
+    }, 800);
+  }
+
+  // Web3Auth Integration (simulated with demo)
+  function web3AuthLogin(isRegister = false) {
+    showToast(`🌐 Connecting to Web3Auth (${isRegister ? 'Register' : 'Login'})...`, 2000);
+    
+    // Simulate Web3Auth SDK flow
+    setTimeout(() => {
+      // Mock Web3Auth response
+      const web3User = {
+        name: 'Web3 User',
+        email: 'user@web3auth.io',
+        walletAddress: '0x742d35Cc6634C0532925a3b844Bc9e7597F0BbEb',
+        provider: 'Web3Auth',
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('nexus_auth_user', JSON.stringify(web3User));
+      localStorage.setItem('web3_wallet', web3User.walletAddress);
+      showToast(`✅ Web3Auth ${isRegister ? 'registration' : 'login'} successful! Wallet: ${web3User.walletAddress.slice(0, 10)}...`, 3000);
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+    }, 1500);
+  }
+
+  // Apple Login detection (iOS)
+  function detectIOS() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const appleBtn = document.getElementById('appleLoginBtn');
+    if (isIOS && appleBtn) {
+      appleBtn.style.display = 'flex';
+      showToast('🍎 iOS detected: Apple Login available', 3000);
+    }
+    return isIOS;
+  }
+
+  function appleLogin() {
+    showToast('🍎 Sign in with Apple (Demo - would redirect to Apple ID)', 2000);
+    setTimeout(() => {
+      const userData = {
+        name: 'Apple User',
+        email: 'user@privaterelay.appleid.com',
+        provider: 'Apple',
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('nexus_auth_user', JSON.stringify(userData));
+      showToast('✅ Logged in with Apple!', 1500);
+      setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+    }, 1000);
+  }
+
+  // Register new user
+  function registerUser(name, phone, email) {
+    const userData = {
+      name: name,
+      phone: phone,
+      email: email || '',
+      registeredAt: new Date().toISOString(),
+      provider: 'phone'
+    };
+    localStorage.setItem('nexus_auth_user', JSON.stringify(userData));
+    showToast(`🎉 Welcome ${name}! Registration successful.`, 2000);
+    setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+  }
+
+  function loginUser(phone) {
+    const userData = {
+      phone: phone,
+      loggedInAt: new Date().toISOString(),
+      provider: 'phone'
+    };
+    localStorage.setItem('nexus_auth_user', JSON.stringify(userData));
+    showToast(`✅ Welcome back! Login successful.`, 1500);
+    setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+  }
+
+  // Toast notification
+  function showToast(message, duration = 3000) {
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.remove();
+    }, duration);
+  }
+
+  // Tab switching
+  function initTabs() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.auth-panel');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.getAttribute('data-tab');
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        panels.forEach(panel => {
+          if ((target === 'login' && panel.id === 'loginPanel') ||
+              (target === 'register' && panel.id === 'registerPanel')) {
+            panel.classList.add('active');
+          } else {
+            panel.classList.remove('active');
+          }
+        });
+        
+        // Clear OTP sections when switching tabs
+        document.getElementById('loginOtpSection').classList.remove('show');
+        document.getElementById('registerOtpSection').classList.remove('show');
+        generatedOtp = null;
+      });
+    });
+  }
+
+  // Event Listeners
+  function initEventListeners() {
+    // LOGIN OTP
+    document.getElementById('loginSendOtpBtn').addEventListener('click', () => {
+      const countryCode = document.getElementById('loginCountryCode').value;
+      const phone = document.getElementById('loginPhone').value.trim();
+      if (!phone) {
+        showToast('Please enter your phone number', 'error');
+        return;
+      }
+      const fullPhone = countryCode + phone;
+      sendOtp(fullPhone, 'login');
+    });
+    
+    document.getElementById('loginVerifyBtn').addEventListener('click', () => {
+      const otp = document.getElementById('loginOtp').value.trim();
+      if (!otp) {
+        showToast('Please enter OTP', 'error');
+        return;
+      }
+      if (verifyOtp(otp, 'login')) {
+        loginUser(pendingLoginPhone);
+      }
+    });
+    
+    document.getElementById('loginResendOtp').addEventListener('click', () => {
+      if (pendingLoginPhone) {
+        sendOtp(pendingLoginPhone, 'login');
+      } else {
+        showToast('Please request OTP first', 'error');
+      }
+    });
+    
+    // REGISTER OTP
+    document.getElementById('registerSendOtpBtn').addEventListener('click', () => {
+      const countryCode = document.getElementById('regCountryCode').value;
+      const phone = document.getElementById('regPhone').value.trim();
+      if (!phone) {
+        showToast('Please enter your phone number', 'error');
+        return;
+      }
+      const fullPhone = countryCode + phone;
+      sendOtp(fullPhone, 'register');
+    });
+    
+    document.getElementById('registerVerifyBtn').addEventListener('click', () => {
+      const otp = document.getElementById('registerOtp').value.trim();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      
+      if (!name) {
+        showToast('Please enter your name', 'error');
+        return;
+      }
+      if (!otp) {
+        showToast('Please enter OTP', 'error');
+        return;
+      }
+      if (verifyOtp(otp, 'register')) {
+        registerUser(name, pendingRegisterPhone, email);
+      }
+    });
+    
+    document.getElementById('registerResendOtp').addEventListener('click', () => {
+      if (pendingRegisterPhone) {
+        sendOtp(pendingRegisterPhone, 'register');
+      } else {
+        showToast('Please request OTP first', 'error');
+      }
+    });
+    
+    // SOCIAL LOGINS
+    document.getElementById('googleLoginBtn').addEventListener('click', () => socialLogin('Google', false));
+    document.getElementById('facebookLoginBtn').addEventListener('click', () => socialLogin('Facebook', false));
+    document.getElementById('web3AuthLoginBtn').addEventListener('click', () => web3AuthLogin(false));
+    document.getElementById('googleRegBtn').addEventListener('click', () => socialLogin('Google', true));
+    document.getElementById('facebookRegBtn').addEventListener('click', () => socialLogin('Facebook', true));
+    document.getElementById('web3AuthRegBtn').addEventListener('click', () => web3AuthLogin(true));
+    
+    // Apple Login (if available)
+    const appleBtn = document.getElementById('appleLoginBtn');
+    if (appleBtn) {
+      appleBtn.addEventListener('click', appleLogin);
+    }
+  }
+
+  // Initialize with iOS detection
+  initTabs();
+  initEventListeners();
+  detectIOS();
+  
+  // Check if already logged in (demo bypass)
+  const existingUser = localStorage.getItem('nexus_auth_user');
+  if (existingUser && window.location.pathname.includes('auth')) {
+    // Optional: auto-redirect if already logged in
+    // setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+  }
+</script>
+</body>
+</html>
