@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nexus Admin Dashboard | CMS & Analytics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    /* Admin Layout */
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .sidebar-header h2 {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-nav {
+      padding: 24px 0;
+    }
+
+    .nav-item {
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: #334155;
+      color: white;
+      border-left-color: #3b82f6;
+    }
+
+    .nav-item i {
+      width: 24px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      padding: 24px 32px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .admin-profile {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background: #3b82f6;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid #eef2ff;
+    }
+
+    .stat-title {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-change {
+      font-size: 13px;
+      color: #10b981;
+    }
+
+    /* Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid #eef2ff;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid #eef2ff;
+    }
+
+    .data-table th, .data-table td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #eef2ff;
+    }
+
+    .data-table th {
+      background: #f8fafc;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-active { background: #10b98120; color: #10b981; }
+    .status-pending { background: #f59e0b20; color: #f59e0b; }
+    .status-banned { background: #ef444420; color: #ef4444; }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      margin: 0 4px;
+      border-radius: 8px;
+      transition: 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #f1f5f9;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 10px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-globe"></i> Nexus Admin</h2>
+      <p style="font-size: 12px; opacity: 0.7; margin-top: 8px;">v2.0 - Dashboard</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-section="dashboard"><i class="fas fa-chart-line"></i> Dashboard</div>
+      <div class="nav-item" data-section="users"><i class="fas fa-users"></i> User Management</div>
+      <div class="nav-item" data-section="content"><i class="fas fa-newspaper"></i> Content CMS</div>
+      <div class="nav-item" data-section="extensions"><i class="fas fa-puzzle-piece"></i> Extensions</div>
+      <div class="nav-item" data-section="transactions"><i class="fas fa-exchange-alt"></i> Transactions</div>
+      <div class="nav-item" data-section="vpn"><i class="fas fa-shield-alt"></i> VPN Analytics</div>
+      <div class="nav-item" data-section="settings"><i class="fas fa-cog"></i> System Settings</div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="top-bar">
+      <h1 class="page-title" id="currentSectionTitle">Dashboard</h1>
+      <div class="admin-profile">
+        <span>Admin@Nexus</span>
+        <div class="avatar">AD</div>
+      </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="section active">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="charts-grid">
+        <div class="chart-card"><canvas id="userChart"></canvas></div>
+        <div class="chart-card"><canvas id="revenueChart"></canvas></div>
+      </div>
+      <div class="chart-card" style="margin-top: 24px;"><canvas id="transactionsChart"></canvas></div>
+    </div>
+
+    <!-- Users Section -->
+    <div id="usersSection" class="section">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+        <h2>User Management</h2>
+        <button class="btn-primary" onclick="openUserModal()"><i class="fas fa-plus"></i> Add User</button>
+      </div>
+      <table class="data-table" id="usersTable">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+        <tbody id="usersList"></tbody>
+      </table>
+    </div>
+
+    <!-- Content CMS Section -->
+    <div id="contentSection" class="section">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+        <h2>Blog & Content Management</h2>
+        <button class="btn-primary" onclick="openPostModal()"><i class="fas fa-plus"></i> New Post</button>
+      </div>
+      <div id="postsList"></div>
+    </div>
+
+    <!-- Extensions Section -->
+    <div id="extensionsSection" class="section">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+        <h2>Extension Marketplace</h2>
+        <button class="btn-primary" onclick="openExtensionModal()"><i class="fas fa-cloud-upload-alt"></i> Submit Extension</button>
+      </div>
+      <div id="extensionsList" class="stats-grid"></div>
+    </div>
+
+    <!-- Transactions Section -->
+    <div id="transactionsSection" class="section">
+      <h2 style="margin-bottom: 24px;">Transaction History</h2>
+      <table class="data-table">
+        <thead><tr><th>ID</th><th>User</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="transactionsList"></tbody>
+      </table>
+    </div>
+
+    <!-- VPN Section -->
+    <div id="vpnSection" class="section">
+      <div class="stats-grid" id="vpnStats"></div>
+      <div class="chart-card"><canvas id="vpnChart" height="100"></canvas></div>
+      <div class="chart-card" style="margin-top: 24px;"><canvas id="vpnLocationsChart"></canvas></div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settingsSection" class="section">
+      <div class="chart-card">
+        <h3>General Settings</h3>
+        <div class="form-group"><label>Site Name</label><input type="text" id="siteName" value="Nexus Browser"></div>
+        <div class="form-group"><label>Maintenance Mode</label><select id="maintenanceMode"><option value="0">Disabled</option><option value="1">Enabled</option></select></div>
+        <div class="form-group"><label>Default Currency</label><select id="defaultCurrency"><option>USD</option><option>EUR</option><option>KES</option></select></div>
+        <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- User Modal -->
+<div id="userModal" class="modal">
+  <div class="modal-content">
+    <h3>Add/Edit User</h3>
+    <div class="form-group"><label>Name</label><input type="text" id="userName"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="userEmail"></div>
+    <div class="form-group"><label>Status</label><select id="userStatus"><option value="active">Active</option><option value="pending">Pending</option><option value="banned">Banned</option></select></div>
+    <button class="btn-primary" onclick="saveUser()">Save</button>
+    <button class="btn-secondary" onclick="closeModal('userModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- Post Modal -->
+<div id="postModal" class="modal">
+  <div class="modal-content">
+    <h3>Create/Edit Post</h3>
+    <div class="form-group"><label>Title</label><input type="text" id="postTitle"></div>
+    <div class="form-group"><label>Category</label><select id="postCategory"><option>Web3</option><option>Crypto</option><option>Tutorial</option><option>News</option></select></div>
+    <div class="form-group"><label>Content</label><textarea id="postContent" rows="5"></textarea></div>
+    <button class="btn-primary" onclick="savePost()">Save</button>
+    <button class="btn-secondary" onclick="closeModal('postModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- Extension Modal -->
+<div id="extensionModal" class="modal">
+  <div class="modal-content">
+    <h3>Submit Extension</h3>
+    <div class="form-group"><label>Extension Name</label><input type="text" id="extName"></div>
+    <div class="form-group"><label>Description</label><textarea id="extDesc" rows="3"></textarea></div>
+    <div class="form-group"><label>Downloads</label><input type="number" id="extDownloads" value="0"></div>
+    <button class="btn-primary" onclick="saveExtension()">Submit</button>
+    <button class="btn-secondary" onclick="closeModal('extensionModal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+  // Mock Data Store
+  let users = [
+    { id: 1, name: "Alex Rivera", email: "alex@nexus.com", status: "active", joined: "2024-01-15" },
+    { id: 2, name: "Sarah Chen", email: "sarah@nexus.com", status: "active", joined: "2024-02-20" },
+    { id: 3, name: "Marcus Wong", email: "marcus@nexus.com", status: "pending", joined: "2024-03-01" }
+  ];
+
+  let posts = [
+    { id: 1, title: "What is Web3?", category: "Web3", content: "Web3 is the decentralized web...", date: "2024-03-10" },
+    { id: 2, title: "Top Crypto Wallets", category: "Crypto", content: "Compare the best wallets...", date: "2024-03-12" }
+  ];
+
+  let extensions = [
+    { id: 1, name: "AdBlock Pro", description: "Block all ads", downloads: 12500, status: "approved" },
+    { id: 2, name: "Web3 Injector", description: "Connect to dApps", downloads: 8900, status: "approved" }
+  ];
+
+  let transactions = [
+    { id: 1, user: "alex@nexus.com", type: "deposit", amount: 500, status: "completed", date: "2024-03-14" },
+    { id: 2, user: "sarah@nexus.com", type: "withdraw", amount: 200, status: "pending", date: "2024-03-13" }
+  ];
+
+  // Stats
+  function updateStats() {
+    const stats = {
+      totalUsers: users.length,
+      activeUsers: users.filter(u => u.status === 'active').length,
+      totalPosts: posts.length,
+      totalExtensions: extensions.length,
+      totalTransactions: transactions.length,
+      totalVolume: transactions.reduce((sum, t) => sum + t.amount, 0)
+    };
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-title">Total Users</div><div class="stat-value">${stats.totalUsers}</div><div class="stat-change">+12% this month</div></div>
+      <div class="stat-card"><div class="stat-title">Active Users</div><div class="stat-value">${stats.activeUsers}</div><div class="stat-change">${((stats.activeUsers/stats.totalUsers)*100).toFixed(0)}% active</div></div>
+      <div class="stat-card"><div class="stat-title">Blog Posts</div><div class="stat-value">${stats.totalPosts}</div><div class="stat-change">+3 new</div></div>
+      <div class="stat-card"><div class="stat-title">Transaction Volume</div><div class="stat-value">$${stats.totalVolume}</div><div class="stat-change">+23% vs last month</div></div>
+    `;
+  }
+
+  function renderUsers() {
+    const tbody = document.getElementById('usersList');
+    tbody.innerHTML = users.map(user => `
+      <tr>
+        <td>${user.id}</td><td>${user.name}</td><td>${user.email}</td>
+        <td><span class="status-badge status-${user.status}">${user.status}</span></td>
+        <td>${user.joined}</td>
+        <td><button class="action-btn" onclick="editUser(${user.id})"><i class="fas fa-edit"></i></button>
+            <button class="action-btn" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i></button></td>
+      </tr>
+    `).join('');
+  }
+
+  function renderPosts() {
+    const container = document.getElementById('postsList');
+    container.innerHTML = posts.map(post => `
+      <div class="stat-card" style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between;">
+          <h3>${post.title}</h3>
+          <div><button class="action-btn" onclick="editPost(${post.id})"><i class="fas fa-edit"></i></button>
+          <button class="action-btn" onclick="deletePost(${post.id})"><i class="fas fa-trash"></i></button></div>
+        </div>
+        <p style="color:#64748b;">${post.category} • ${post.date}</p>
+        <p>${post.content.substring(0, 100)}...</p>
+      </div>
+    `).join('');
+  }
+
+  function renderExtensions() {
+    const container = document.getElementById('extensionsList');
+    container.innerHTML = extensions.map(ext => `
+      <div class="stat-card">
+        <h3>${ext.name}</h3>
+        <p style="color:#64748b;">${ext.description}</p>
+        <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+          <span>📥 ${ext.downloads.toLocaleString()} downloads</span>
+          <button class="action-btn" onclick="deleteExtension(${ext.id})"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderTransactions() {
+    const tbody = document.getElementById('transactionsList');
+    tbody.innerHTML = transactions.map(tx => `
+      <tr>
+        <td>${tx.id}</td><td>${tx.user}</td><td>${tx.type}</td><td>$${tx.amount}</td>
+        <td><span class="status-badge status-${tx.status === 'completed' ? 'active' : 'pending'}">${tx.status}</span></td>
+        <td>${tx.date}</td>
+      </tr>
+    `).join('');
+  }
+
+  // CRUD Operations
+  let editingUserId = null;
+  function openUserModal() { editingUserId = null; document.getElementById('userModal').style.display = 'flex'; }
+  function editUser(id) { editingUserId = id; const user = users.find(u => u.id === id); document.getElementById('userName').value = user.name; document.getElementById('userEmail').value = user.email; document.getElementById('userStatus').value = user.status; document.getElementById('userModal').style.display = 'flex'; }
+  function saveUser() {
+    const userData = { name: document.getElementById('userName').value, email: document.getElementById('userEmail').value, status: document.getElementById('userStatus').value, joined: new Date().toISOString().split('T')[0] };
+    if (editingUserId) { const idx = users.findIndex(u => u.id === editingUserId); users[idx] = { ...users[idx], ...userData }; }
+    else { users.push({ id: users.length + 1, ...userData }); }
+    renderUsers(); updateStats(); closeModal('userModal');
+  }
+  function deleteUser(id) { if (confirm('Delete user?')) { users = users.filter(u => u.id !== id); renderUsers(); updateStats(); } }
+
+  let editingPostId = null;
+  function openPostModal() { editingPostId = null; document.getElementById('postModal').style.display = 'flex'; }
+  function editPost(id) { editingPostId = id; const post = posts.find(p => p.id === id); document.getElementById('postTitle').value = post.title; document.getElementById('postCategory').value = post.category; document.getElementById('postContent').value = post.content; document.getElementById('postModal').style.display = 'flex'; }
+  function savePost() {
+    const postData = { title: document.getElementById('postTitle').value, category: document.getElementById('postCategory').value, content: document.getElementById('postContent').value, date: new Date().toISOString().split('T')[0] };
+    if (editingPostId) { const idx = posts.findIndex(p => p.id === editingPostId); posts[idx] = { ...posts[idx], ...postData }; }
+    else { posts.push({ id: posts.length + 1, ...postData }); }
+    renderPosts(); updateStats(); closeModal('postModal');
+  }
+  function deletePost(id) { if (confirm('Delete post?')) { posts = posts.filter(p => p.id !== id); renderPosts(); updateStats(); } }
+
+  function openExtensionModal() { document.getElementById('extensionModal').style.display = 'flex'; }
+  function saveExtension() {
+    extensions.push({ id: extensions.length + 1, name: document.getElementById('extName').value, description: document.getElementById('extDesc').value, downloads: parseInt(document.getElementById('extDownloads').value), status: 'pending' });
+    renderExtensions(); updateStats(); closeModal('extensionModal');
+  }
+  function deleteExtension(id) { if (confirm('Remove extension?')) { extensions = extensions.filter(e => e.id !== id); renderExtensions(); updateStats(); } }
+
+  function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+  function saveSettings() { alert('Settings saved!'); localStorage.setItem('siteName', document.getElementById('siteName').value); }
+
+  // Charts
+  function initCharts() {
+    new Chart(document.getElementById('userChart'), { type: 'line', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr'], datasets: [{ label: 'New Users', data: [45, 67, 89, 112], borderColor: '#3b82f6' }] } });
+    new Chart(document.getElementById('revenueChart'), { type: 'doughnut', data: { labels: ['Subscriptions', 'In-App', 'Ads'], datasets: [{ data: [12500, 8900, 4300], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }] } });
+    new Chart(document.getElementById('transactionsChart'), { type: 'bar', data: { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], datasets: [{ label: 'Transaction Volume', data: [12500, 15800, 14200, 18900], backgroundColor: '#3b82f6' }] } });
+    new Chart(document.getElementById('vpnChart'), { type: 'line', data: { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], datasets: [{ label: 'Active VPN Connections', data: [234, 267, 289, 312, 398, 456, 423], borderColor: '#10b981' }] } });
+    new Chart(document.getElementById('vpnLocationsChart'), { type: 'pie', data: { labels: ['USA', 'Europe', 'Asia', 'Other'], datasets: [{ data: [45, 28, 18, 9], backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'] }] } });
+  }
+
+  // Navigation
+  function initNavigation() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const section = item.getAttribute('data-section');
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(`${section}Section`).classList.add('active');
+        document.getElementById('currentSectionTitle').innerText = item.innerText.trim();
+        if (section === 'dashboard') updateStats();
+        if (section === 'users') renderUsers();
+        if (section === 'content') renderPosts();
+        if (section === 'extensions') renderExtensions();
+        if (section === 'transactions') renderTransactions();
+        if (section === 'vpn') initVPNStats();
+      });
+    });
+  }
+
+  function initVPNStats() {
+    document.getElementById('vpnStats').innerHTML = `
+      <div class="stat-card"><div class="stat-title">Active Connections</div><div class="stat-value">1,247</div></div>
+      <div class="stat-card"><div class="stat-title">Total Data Transferred</div><div class="stat-value">2.4 TB</div></div>
+      <div class="stat-card"><div class="stat-title">Avg. Speed</div><div class="stat-value">124 Mbps</div></div>
+    `;
+  }
+
+  // Auto-refresh data every 30 seconds
+  setInterval(() => {
+    if (document.getElementById('dashboardSection').classList.contains('active')) updateStats();
+  }, 30000);
+
+  updateStats();
+  renderUsers();
+  renderPosts();
+  renderExtensions();
+  renderTransactions();
+  initCharts();
+  initNavigation();
+  initVPNStats();
+
+  // Close modals on outside click
+  window.onclick = (e) => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+</script>
+</body>
+</html>
