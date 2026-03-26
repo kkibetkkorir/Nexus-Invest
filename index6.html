@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#3b82f6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  
+  <title>Nexus Blog | Web3 Browser News & Insights</title>
+  <meta name="description" content="Latest news, tutorials, and insights about Web3, crypto browsers, blockchain technology, and decentralized applications.">
+  <meta name="keywords" content="web3 blog, crypto browser news, blockchain tutorials, nexus browser, decentralized web">
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    /* Navigation (matching landing page) */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      padding: 16px 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #334155;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #3b82f6;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 48px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    /* Blog Header */
+    .blog-header {
+      padding: 120px 32px 60px;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+      text-align: center;
+    }
+
+    .blog-header h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #0f172a, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .blog-header p {
+      font-size: 18px;
+      color: #475569;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Categories Bar */
+    .categories-bar {
+      position: sticky;
+      top: 72px;
+      background: white;
+      border-bottom: 1px solid #eef2ff;
+      padding: 16px 32px;
+      z-index: 99;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+
+    .categories-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+    }
+
+    .category-btn {
+      background: #f1f5f9;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #334155;
+    }
+
+    .category-btn:hover, .category-btn.active {
+      background: #3b82f6;
+      color: white;
+    }
+
+    /* Main Content Layout */
+    .blog-main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 48px 32px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+    }
+
+    /* Articles Grid */
+    .articles-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .article-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid #eef2ff;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.15);
+    }
+
+    .article-image {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #667eea, #3b82f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: white;
+    }
+
+    .article-content {
+      padding: 24px;
+    }
+
+    .article-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .article-category {
+      background: #eef2ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      color: #3b82f6;
+      font-weight: 500;
+    }
+
+    .article-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .article-title a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+
+    .article-title a:hover {
+      color: #3b82f6;
+    }
+
+    .article-excerpt {
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .read-more {
+      color: #3b82f6;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Ad Formats */
+    .ad-container {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-radius: 20px;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .ad-banner {
+      background: linear-gradient(135deg, #667eea20, #3b82f620);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .ad-label {
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .ad-content {
+      padding: 20px;
+    }
+
+    .ad-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .ad-btn {
+      display: inline-block;
+      background: #3b82f6;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    /* Native Ad (in-article) */
+    .native-ad {
+      background: #fef9e3;
+      border-left: 4px solid #f59e0b;
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin: 24px 0;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .native-ad-icon {
+      font-size: 32px;
+    }
+
+    .native-ad-content {
+      flex: 1;
+    }
+
+    .native-ad-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .native-ad-link {
+      color: #f59e0b;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* Video Ad */
+    .video-ad {
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .video-ad-placeholder {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 40px;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+
+    /* Newsletter Sidebar */
+    .sidebar-widget {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid #eef2ff;
+    }
+
+    .sidebar-widget h3 {
+      margin-bottom: 12px;
+    }
+
+    .sidebar-widget input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 48px;
+      margin: 12px 0;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0f172a;
+      color: white;
+      padding: 48px 32px 24px;
+      margin-top: 48px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 48px;
+    }
+
+    .footer-section h4 {
+      margin-bottom: 16px;
+    }
+
+    .footer-section a {
+      display: block;
+      color: #94a3b8;
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 48px;
+      margin-top: 48px;
+      border-top: 1px solid #334155;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 768px) {
+      .blog-main {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .blog-header h1 {
+        font-size: 32px;
+      }
+      .categories-bar {
+        top: 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">🌐 Nexus Browser</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#download">Download</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="index.html#download" class="btn-primary">Get App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Blog Header -->
+  <header class="blog-header">
+    <h1>Nexus Blog</h1>
+    <p>Insights, tutorials, and news about Web3, crypto browsers, and the decentralized web</p>
+  </header>
+
+  <!-- Categories Bar -->
+  <div class="categories-bar">
+    <div class="categories-container" id="categoriesContainer">
+      <button class="category-btn active" data-category="all">All Posts</button>
+      <button class="category-btn" data-category="web3">Web3</button>
+      <button class="category-btn" data-category="crypto">Cryptocurrency</button>
+      <button class="category-btn" data-category="tutorial">Tutorials</button>
+      <button class="category-btn" data-category="security">Privacy & Security</button>
+      <button class="category-btn" data-category="defi">DeFi</button>
+      <button class="category-btn" data-category="news">News</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="blog-main">
+    <!-- Articles Grid -->
+    <div class="articles-grid" id="articlesGrid"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Banner Ad -->
+      <div class="ad-container">
+        <div class="ad-label">Sponsored</div>
+        <div class="ad-content">
+          <div class="ad-title">🚀 Trade Crypto with 0% Fees</div>
+          <p style="font-size: 14px; margin: 8px 0;">Get started with Nexus Exchange</p>
+          <a href="#" class="ad-btn">Claim Offer</a>
+        </div>
+      </div>
+
+      <!-- Newsletter Widget -->
+      <div class="sidebar-widget">
+        <h3>📧 Newsletter</h3>
+        <p>Get the latest Web3 insights delivered to your inbox</p>
+        <input type="email" placeholder="Your email address">
+        <button class="btn-primary" style="width: 100%;">Subscribe</button>
+      </div>
+
+      <!-- Video Ad -->
+      <div class="video-ad">
+        <div class="ad-label" style="color: #94a3b8;">Video Ad</div>
+        <div class="video-ad-placeholder" id="videoAd">
+          <i class="fas fa-play-circle" style="font-size: 48px; opacity: 0.7;"></i>
+          <p style="margin-top: 12px;">Watch: How Nexus Browser protects your privacy</p>
+        </div>
+      </div>
+
+      <!-- Native Ad (Sidebar) -->
+      <div class="native-ad" style="background: #eef2ff; border-left-color: #3b82f6;">
+        <div class="native-ad-icon">🔒</div>
+        <div class="native-ad-content">
+          <div class="native-ad-title">Get Nexus VPN Free for 30 Days</div>
+          <a href="#" class="native-ad-link">Claim Now →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Nexus Browser</h4>
+        <a href="index.html">Home</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#download">Download</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Developer Docs</a>
+        <a href="#">GitHub</a>
+        <a href="#">Status</a>
+      </div>
+      <div class="footer-section">
+        <h4>Community</h4>
+        <a href="#">Discord</a>
+        <a href="#">Twitter</a>
+        <a href="#">Telegram</a>
+        <a href="#">Reddit</a>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2024 Nexus Browser. All rights reserved. Built for Web3.
+    </div>
+  </footer>
+
+  <script>
+    // Blog Articles Data with varied content and ad placements
+    const articles = [
+      {
+        id: 1,
+        title: "What is Web3? The Future of the Internet Explained",
+        excerpt: "Discover how Web3 is transforming the internet with decentralization, blockchain technology, and user ownership...",
+        category: "web3",
+        date: "Mar 15, 2024",
+        readTime: "8 min read",
+        imageIcon: "🌐",
+        hasNativeAd: true,
+        nativeAdPosition: 2
+      },
+      {
+        id: 2,
+        title: "Top 5 Crypto Wallets for 2024: Security Comparison",
+        excerpt: "We review the most secure cryptocurrency wallets, including hardware, software, and browser-based options...",
+        category: "crypto",
+        date: "Mar 12, 2024",
+        readTime: "10 min read",
+        imageIcon: "💎",
+        hasInlineAd: true
+      },
+      {
+        id: 3,
+        title: "How to Set Up Your First DeFi Portfolio",
+        excerpt: "Step-by-step guide to start earning yield on your crypto assets through decentralized finance protocols...",
+        category: "defi",
+        date: "Mar 10, 2024",
+        readTime: "12 min read",
+        imageIcon: "📈"
+      },
+      {
+        id: 4,
+        title: "Browser Privacy: 10 Tips to Protect Your Data",
+        excerpt: "Learn how to safeguard your online privacy with these essential browser settings and extensions...",
+        category: "security",
+        date: "Mar 8, 2024",
+        readTime: "6 min read",
+        imageIcon: "🛡️",
+        hasNativeAd: true,
+        nativeAdPosition: 1
+      },
+      {
+        id: 5,
+        title: "Nexus Browser 2.0: What's New in the Latest Update",
+        excerpt: "Explore the new features including built-in VPN, improved wallet, and extension marketplace...",
+        category: "news",
+        date: "Mar 5, 2024",
+        readTime: "5 min read",
+        imageIcon: "🚀"
+      },
+      {
+        id: 6,
+        title: "Understanding Smart Contracts: A Beginner's Guide",
+        excerpt: "Learn how smart contracts work and why they're essential for DeFi, NFTs, and dApps...",
+        category: "tutorial",
+        date: "Mar 3, 2024",
+        readTime: "9 min read",
+        imageIcon: "📝",
+        hasInlineAd: true
+      },
+      {
+        id: 7,
+        title: "The Rise of Layer 2 Solutions: Scaling Ethereum",
+        excerpt: "How Layer 2 networks are making blockchain transactions faster and cheaper...",
+        category: "web3",
+        date: "Feb 28, 2024",
+        readTime: "7 min read",
+        imageIcon: "⚡"
+      },
+      {
+        id: 8,
+        title: "NFT Market Analysis: Trends to Watch in 2024",
+        excerpt: "Analysis of the NFT market, emerging trends, and investment opportunities...",
+        category: "crypto",
+        date: "Feb 25, 2024",
+        readTime: "11 min read",
+        imageIcon: "🎨",
+        hasNativeAd: true,
+        nativeAdPosition: 3
+      }
+    ];
+
+    // Ad Components
+    const adComponents = {
+      bannerAd: () => `
+        <div class="ad-container" style="margin: 24px 0;">
+          <div class="ad-label">Sponsored Content</div>
+          <div class="ad-content" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <i class="fas fa-chart-line" style="font-size: 40px; color: #3b82f6;"></i>
+            <div style="flex: 1;">
+              <div class="ad-title">Trade Crypto with Zero Fees</div>
+              <p style="font-size: 13px;">Get $50 bonus on first deposit</p>
+            </div>
+            <a href="#" class="ad-btn" style="padding: 6px 16px;">Trade Now</a>
+          </div>
+        </div>
+      `,
+      nativeAd: () => `
+        <div class="native-ad">
+          <div class="native-ad-icon">🌟</div>
+          <div class="native-ad-content">
+            <div class="native-ad-title">Sponsored: Nexus Premium</div>
+            <p style="font-size: 13px;">Get VPN + Wallet + Ad-blocker for just $4.99/mo</p>
+            <a href="#" class="native-ad-link">Learn More →</a>
+          </div>
+        </div>
+      `,
+      inlineSquareAd: () => `
+        <div class="ad-banner" style="margin: 20px 0; background: linear-gradient(135deg, #fef3c7, #fde68a);">
+          <div class="ad-label">Advertisement</div>
+          <div style="padding: 16px;">
+            <i class="fas fa-bitcoin" style="font-size: 32px; color: #f59e0b;"></i>
+            <div class="ad-title">Buy Crypto Instantly</div>
+            <a href="#" class="ad-btn" style="background: #f59e0b;">Get Started</a>
+          </div>
+        </div>
+      `
+    };
+
+    // Render articles with interspersed ads
+    function renderArticles(category = 'all') {
+      const grid = document.getElementById('articlesGrid');
+      let filteredArticles = articles;
+      
+      if (category !== 'all') {
+        filteredArticles = articles.filter(article => article.category === category);
+      }
+      
+      let articlesHTML = '';
+      
+      filteredArticles.forEach((article, index) => {
+        // Add article card
+        articlesHTML += `
+          <article class="article-card">
+            <div class="article-image">
+              <span style="font-size: 64px;">${article.imageIcon}</span>
+            </div>
+            <div class="article-content">
+              <div class="article-meta">
+                <span class="article-category">${article.category.toUpperCase()}</span>
+                <span>${article.date}</span>
+                <span>${article.readTime}</span>
+              </div>
+              <h2 class="article-title">
+                <a href="#">${article.title}</a>
+              </h2>
+              <p class="article-excerpt">${article.excerpt}</p>
+              <a href="#" class="read-more">Read more →</a>
+            </div>
+          </article>
+        `;
+        
+        // Add native ad after specific positions (simulating in-content ads)
+        if (article.hasNativeAd && index === article.nativeAdPosition - 1) {
+          articlesHTML += adComponents.nativeAd();
+        }
+        
+        // Add inline banner ad every 3 articles
+        if ((index + 1) % 3 === 0 && index !== filteredArticles.length - 1) {
+          articlesHTML += adComponents.inlineSquareAd();
+        }
+      });
+      
+      // If no articles, show message
+      if (filteredArticles.length === 0) {
+        articlesHTML = '<div style="text-align: center; padding: 60px;"><p>No articles found in this category. Check back soon!</p></div>';
+      }
+      
+      grid.innerHTML = articlesHTML;
+    }
+
+    // Category filtering
+    function initCategories() {
+      const buttons = document.querySelectorAll('.category-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Update active state
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // Filter articles
+          const category = btn.getAttribute('data-category');
+          renderArticles(category);
+        });
+      });
+    }
+
+    // Video ad interaction
+    function initVideoAd() {
+      const videoAd = document.getElementById('videoAd');
+      if (videoAd) {
+        videoAd.addEventListener('click', () => {
+          alert('🎬 Video ad demo: "How Nexus Browser protects your privacy" would play here.');
+        });
+      }
+    }
+
+    // Newsletter subscription
+    function initNewsletter() {
+      const subscribeBtn = document.querySelector('.sidebar-widget .btn-primary');
+      const emailInput = document.querySelector('.sidebar-widget input');
+      if (subscribeBtn && emailInput) {
+        subscribeBtn.addEventListener('click', () => {
+          const email = emailInput.value.trim();
+          if (email) {
+            alert(`📧 Thanks for subscribing! We'll send updates to ${email}`);
+            emailInput.value = '';
+          } else {
+            alert('Please enter a valid email address');
+          }
+        });
+      }
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Initialize
+    renderArticles('all');
+    initCategories();
+    initVideoAd();
+    initNewsletter();
+    
+    // Add ad refresh simulation (for demo purposes)
+    console.log('Blog loaded with multiple ad formats: banner ads, native ads, inline square ads, video ads, and sidebar ads');
+  </script>
+</body>
+</html>
